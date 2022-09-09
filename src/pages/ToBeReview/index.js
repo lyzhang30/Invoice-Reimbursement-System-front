@@ -1,15 +1,18 @@
 import React from "react";
+import { useContext, useState, useEffect } from "react";
 import BackgroundCard from "../../Component/BackgroundCard";
 
 // 待审核页面
 export default function ToBeReview() {
+  const [list, setList] = useState([]);
   return (
     <>
       <BackgroundCard>
-        <div
-          className="h-auto w-full min-h-0  shrink-0 grid grid-flow-row grid-cols-4
-         gap-14 auto-cols-fr place-items-center"
-        ></div>
+        <div className="h-auto w-full min-h-0 px-6 shrink-0 flex flex-col justify-start items-center">
+          {list !== undefined && (
+            <div className="h-36 w-full bg-pink-100 rounded "></div>
+          )}
+        </div>
       </BackgroundCard>
     </>
   );

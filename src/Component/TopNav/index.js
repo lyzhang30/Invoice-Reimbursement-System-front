@@ -47,9 +47,12 @@ export default function TopNav(props) {
           >
             <OutlookSvg></OutlookSvg>
           </div>
-          <p className="text-gray-200 transition-all duration-500 group-hover:text-gray-800 shrink-0">
+          <a
+            className="text-gray-200 transition-all duration-500 group-hover:text-gray-800 shrink-0"
+            href="https://partner.outlook.cn/mail/"
+          >
             outlook
-          </p>
+          </a>
         </div>
         {/* 头像 */}
         <div

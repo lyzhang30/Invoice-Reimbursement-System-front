@@ -1,13 +1,15 @@
 import React from "react";
-import { useState, useContext, useEffect, useRef } from "react";
+import { useContext, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ToastContext } from "../../App";
+import { UserInfoContext } from "../../App";
 import axios from "axios";
 import { LOGIN } from "../../utils/mapPath";
 import loginBackgroundImg from "./../../img/FAF430C58267CAC39DB76652942_F5EAB55C_C4AC3.jpg";
 
 export default function Login(props) {
   const ToastController = useContext(ToastContext);
+  const { setUserInfo } = useContext(UserInfoContext);
   const navigate = useNavigate();
   const usrInput = useRef(null);
   const passwordInput = useRef(null);
@@ -15,7 +17,11 @@ export default function Login(props) {
   // 尝试自动登录
   // useEffect(() => {
   //   const fetch = async () => {
-  //     const res = await axios.get(LOGIN);
+  //     const token = localStorage.getItem("token");
+  //     const params = new URLSearchParams();
+  //     params.append("userName", usrInput.current.value);
+  //     params.append("password", passwordInput.current.value);
+  //     const res = await axios.post(LOGIN, params);
   //     if (res.data.code === 1) {
   //       ToastController({ mes: "您已登录！一秒后返回", timeout: 1000 });
   //       setTimeout(() => {
@@ -26,22 +32,69 @@ export default function Login(props) {
   //   fetch();
   // }, [navigate, ToastController]);
 
+  //20lyzhang1
+  //123456
+
   // 用户点击登录
   const login = async () => {
+    if (usrInput.current.value === "" && passwordInput.current.value === "") {
+      ToastController({ mes: "猪猪，还什么都没写噢~", timeout: 3000 });
+      return;
+    }
+    if (usrInput.current.value === "") {
+      ToastController({ mes: "猪猪，账号怎么为空捏~", timeout: 3000 });
+      return;
+    }
+    if (passwordInput.current.value === "") {
+      ToastController({ mes: "猪猪，密码忘记了咩~", timeout: 3000 });
+      return;
+    }
     const params = new URLSearchParams();
-    params.append("userName", "20lyzhang1");
-    params.append("password", "123456");
+    params.append("userName", usrInput.current.value);
+    params.append("password", passwordInput.current.value);
     const res = await axios.post(LOGIN, params);
+    // 登陆成功
     if (res.data.code === 200) {
       ToastController({
         mes: "登录成功!",
         timeout: 1000,
       });
+      localStorage.setItem("token", res.data.token);
+      // console.clear();
+
+      // console.log(res.data.data);
+      // console.log(JSON.parse(JSON.stringify({ hello: "world" })));
+      let ans = JSON.parse(res.data.data);
+      console.log(typeof ans);
+      console.log(ans.userDto.name);
+      setUserInfo({
+        id: ans.userDto.id,
+        roleName: ans.userDto.roleName,
+        name: ans.userDto.name,
+        email: ans.userDto.email,
+      });
+
+      // setUserInfo({
+      //   id: 15,
+      //   roleName: "财务",
+      //   name: "胡毅薇",
+      //   email: "hywei@stu.edu.cn",
+      // });
+
       setTimeout(() => {
         navigate("Home");
+        // navigate(-1);
       }, 1000);
-    } else {
+    }
+    //登录失败
+    else {
       ToastController({ mes: "账户或用户名写错啦猪猪~", timeout: 3000 });
+    }
+  };
+
+  const enterLogin = (e) => {
+    if (e.keyCode === 13) {
+      login();
     }
   };
 
@@ -79,6 +132,7 @@ export default function Login(props) {
               <input
                 type="text"
                 ref={usrInput}
+                onKeyUp={enterLogin}
                 className="h-3/5 w-7/12 flex-grow px-5 text-gray-600 py-2 rounded border focus:outline-none focus:ring-2"
               />
             </div>
@@ -90,6 +144,7 @@ export default function Login(props) {
               <input
                 type="text"
                 ref={passwordInput}
+                onKeyUp={enterLogin}
                 className="h-3/5 w-7/12 flex-grow px-5 text-gray-600 py-2 rounded border focus:outline-none focus:ring-2"
               />
             </div>

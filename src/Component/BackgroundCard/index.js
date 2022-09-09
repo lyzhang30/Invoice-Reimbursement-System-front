@@ -1,12 +1,14 @@
 import React from "react";
-import { useState, useContext, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { useContext } from "react";
 import { UserInfoContext } from "../../App";
+import StuLogo from "../../img/R-C.png";
 import Svg1, { Svg2, Svg3, Svg4, Svg5 } from "../../svg";
 import TopNav from "../TopNav";
-import { Link } from "react-router-dom";
 
 // 背景组件
 export default function BackgroundCard(props) {
+  const { UserInfo } = useContext(UserInfoContext);
   return (
     <div
       className="h-screen w-screen flex flex-col justify-between items-center"
@@ -40,32 +42,49 @@ export default function BackgroundCard(props) {
 
       {/* footer */}
       <div className="h-14 w-full shrink-0 flex justify-center items-center text-gray-600">
-        Shan Tou University
+        Shan Tou University {UserInfo.name}
       </div>
     </div>
   );
 }
 
 function LeftNav() {
-  const { role } = useContext(UserInfoContext);
+  const { UserInfo } = useContext(UserInfoContext);
+  function isFocus(path, str) {
+    if (path.search(str) !== -1) return true;
+    return false;
+  }
+  let path = useLocation().pathname;
   return (
     <div className="h-full w-full flex flex-col justify-start items-center bg-blue-20 ">
+      <div
+        className="h-14 w-full mb-3"
+        style={{
+          backgroundImage: `url(${StuLogo})`,
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+        }}
+      ></div>
       {/* 报销项目按钮 */}
       <div className="h-14 w-full flex justify-between items-center space-x-1 pl-1 select-none group">
         <div className={`h-8 w-8 flex justify-center items-center `}>
           <Svg1></Svg1>
         </div>
         <Link
-          to={`/`}
+          to={`/Home`}
           className={`h-full w-10 flex-grow flex justify-start items-center text-blue-500
         `}
         >
           报销项目
         </Link>
-        <div className="w-0 h-0 border-l-4 border-blue-600 transition-all duration-500 group-hover:h-full"></div>
+        <div
+          className={`w-0  border-l-4 border-blue-600 transition-all duration-500 group-hover:h-full
+        ${isFocus(path, "Home") === true ? "h-full" : "h-0"}`}
+        ></div>
       </div>
       {/* 我的申请按钮 */}
-      {role === "student" && (
+      {UserInfo.roleName === "用户" && (
         <div className="h-14 w-full flex justify-between items-center space-x-1 pl-1 select-none group">
           <div className={`h-8 w-8 flex justify-center items-center `}>
             <Svg2></Svg2>
@@ -77,12 +96,13 @@ function LeftNav() {
             我的申请
           </Link>
           <div
-            className={` w-0 h-0 border-l-4 border-blue-600 transition-all duration-500 group-hover:h-full`}
+            className={` w-0 border-l-4 border-blue-600 transition-all duration-500 group-hover:h-full
+            ${isFocus(path, "MyItems") === true ? "h-full" : "h-0"}`}
           ></div>
         </div>
       )}
       {/* 待审核按钮 */}
-      {role !== "student" && role !== "administrators" && (
+      {UserInfo.roleName !== "用户" && UserInfo.roleName !== "管理员" && (
         <div className="h-14 w-full flex justify-between items-center space-x-1 pl-1 select-none group">
           <div className={`h-8 w-8 flex justify-center items-center `}>
             <Svg3></Svg3>
@@ -95,12 +115,13 @@ function LeftNav() {
             待审核
           </Link>
           <div
-            className={` w-0 h-0 border-l-4 border-blue-600 transition-all duration-500 group-hover:h-full`}
+            className={` w-0 border-l-4 border-blue-600 transition-all duration-500 group-hover:h-full
+            ${isFocus(path, "ToBeReview") === true ? "h-full" : "h-0"}`}
           ></div>
         </div>
       )}
       {/* 项目管理按钮 */}
-      {role === "administrators" && (
+      {UserInfo.roleName === "管理员" && (
         <div className="h-14 w-full flex justify-between items-center space-x-1 pl-1 select-none group">
           <div className={`h-8 w-8 flex justify-center items-center `}>
             <Svg4></Svg4>
@@ -113,12 +134,13 @@ function LeftNav() {
             项目管理
           </Link>
           <div
-            className={` w-0 h-0 border-l-4 border-blue-600 transition-all duration-500 group-hover:h-full`}
+            className={` w-0 border-l-4 border-blue-600 transition-all duration-500 group-hover:h-full
+            ${isFocus(path, "xxx") === true ? "h-full" : "h-0"}`}
           ></div>
         </div>
       )}
       {/* 账号管理按钮 */}
-      {role === "administrators" && (
+      {UserInfo.roleName === "管理员" && (
         <div className="h-14 w-full flex justify-between items-center space-x-1 pl-1 select-none group">
           <div className={`h-8 w-8 flex justify-center items-center `}>
             <Svg5></Svg5>
@@ -130,7 +152,8 @@ function LeftNav() {
             账号管理
           </Link>
           <div
-            className={` w-0 h-0 border-l-4 border-blue-600 transition-all duration-500 group-hover:h-full`}
+            className={` w-0 border-l-4 border-blue-600 transition-all duration-500 group-hover:h-full
+            ${isFocus(path, "账号管理") === true ? "h-full" : "h-0"}`}
           ></div>
         </div>
       )}

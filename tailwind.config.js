@@ -13,6 +13,9 @@ module.exports = {
         p50: "50%",
         p60: "60%",
       },
+      animation: {
+        "spin-slow": "spin 3s linear infinite",
+      },
     },
   },
   plugins: [],
