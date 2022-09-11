@@ -59,19 +59,20 @@ export default function Login(props) {
         mes: "登录成功!",
         timeout: 1000,
       });
-      localStorage.setItem("token", res.data.token);
-      // console.clear();
+      const ans = JSON.parse(res.data.data);
+      // console.log(ans.token);
+      localStorage.setItem("token", ans.token);
+      // let token = localStorage.getItem("token");
 
-      // console.log(res.data.data);
-      // console.log(JSON.parse(JSON.stringify({ hello: "world" })));
-      let ans = JSON.parse(res.data.data);
-      console.log(typeof ans);
       console.log(ans.userDto.name);
       setUserInfo({
         id: ans.userDto.id,
         roleName: ans.userDto.roleName,
+        userName: ans.userDto.userName,
         name: ans.userDto.name,
-        email: ans.userDto.email,
+        mail: ans.userDto.email,
+        location: ans.userDto.location,
+        tel: ans.userDto.phone,
       });
 
       // setUserInfo({

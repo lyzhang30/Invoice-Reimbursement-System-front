@@ -13,14 +13,18 @@ const MyItems = lazy(() => import("./pages/MyItems"));
 const ToBeReview = lazy(() => import("./pages/ToBeReview"));
 const Loading = lazy(() => import("./pages/Loading"));
 const GoWrong404 = lazy(() => import("./pages/GoWrong404"));
+const PersonalPage = lazy(() => import("./pages/PersonalPage"));
 
+// const  = lazy(() => import(""));
+// const  = lazy(() => import(""));
+// const  = lazy(() => import(""));
 // 这个文件不要改动！！！
 // 这个文件不要改动！！！
 // 这个文件不要改动！！！
 
 function App() {
   const [toastConfig, setToastConfig] = useState({});
-  const [UserInfo, setUserInfo] = useState({});
+  const [UserInfo, setUserInfo] = useState();
   /**
    * 用于控制toast展示的函数，这个控制函数通过context向下传递到每一个组件里
    * 在控制函数内部实现了组件定时关闭的能力
@@ -53,6 +57,7 @@ function App() {
                 <Route path="/" element={<Login />}></Route>
                 <Route path="Home" element={<Home />}></Route>
                 <Route path="MyItems" element={<MyItems />}></Route>
+                <Route path="PersonalPage" element={<PersonalPage />}></Route>
                 <Route path="ToBeReview" element={<ToBeReview />}></Route>
                 <Route path="MyItems" element={<MyItems />}></Route>
                 <Route path="*" element={<GoWrong404 />}></Route>
@@ -65,7 +70,7 @@ function App() {
   );
 }
 
-export const UserInfoContext = React.createContext({});
+export const UserInfoContext = React.createContext();
 export const ToastContext = React.createContext();
 export default App;
 

@@ -1,5 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import img from "./../../img/img15.jpg";
 
 export default function TopNav(props) {
@@ -68,9 +69,12 @@ export default function TopNav(props) {
               backgroundSize: "cover",
             }}
           ></div>
-          <p className="text-gray-200 transition-all duration-500 group-hover:text-gray-800 shrink-0">
+          <Link
+            to={"/PersonalPage"}
+            className="text-gray-200 transition-all duration-500 group-hover:text-gray-800 shrink-0"
+          >
             个人信息
-          </p>
+          </Link>
         </div>
       </div>
     </div>
