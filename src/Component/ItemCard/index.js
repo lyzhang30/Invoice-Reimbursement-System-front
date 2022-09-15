@@ -10,7 +10,7 @@ export default function ItemCard(props) {
      bg-blue-50 rounded transition-all duration-200 hover:bg-blue-100"
     >
       <Link
-        to={`/Home`}
+        to={`/Project`}
         className="h-12 max-w-full shrink-0 grow-0 block text-blue-600 text-3xl 
        font-bold truncate px-5 transition-all duration-200 hover:scale-x-110 hover:translate-x-3 hover:text-gray-700"
       >

@@ -32,15 +32,15 @@ export default function TopNav(props) {
       style={{ backgroundColor: "#001529" }}
     >
       {/* 时间 */}
-      <div className="h-3/5 w-2/12 flex justify-center items-center bg-gray-600 text-gray-50 shrink-0">
+      <div className="h-3/5 w-3/12 flex justify-center items-center bg-gray-600 text-gray-50 shrink-0">
         {time}
       </div>
       {/* 右边栏 */}
-      <div className="h-full w-2/12 flex justify-end items-center shrink-0  space-x-6">
+      <div className="h-full w-7/12 flex justify-end items-center shrink-0  space-x-6">
         {/* outlook */}
         <div
           className="h-9 w-9 rounded-full bg-gray-200 transition-all duration-500 hover:w-32
-           flex justify-start items-center overflow-hidden group space-x-1"
+           flex justify-start items-center overflow-hidden group space-x-3"
         >
           <div
             className="h-9 w-9 flex justify-center items-center rounded-full shrink-0 transition-all duration-100
@@ -58,7 +58,7 @@ export default function TopNav(props) {
         {/* 头像 */}
         <div
           className="h-9 w-9 rounded-full bg-gray-200 transition-all duration-500 hover:w-32
-           flex justify-start items-center overflow-hidden group space-x-1"
+           flex justify-start items-center overflow-hidden group space-x-2"
         >
           <div
             className="h-9 w-9 rounded-full shrink-0 transition-all duration-100 border-gray-50 group-hover:border-2"
@@ -89,8 +89,8 @@ function OutlookSvg() {
       version="1.1"
       xmlns="http://www.w3.org/2000/svg"
       p-id="1376"
-      width="22"
-      height="22"
+      width="21"
+      height="21"
     >
       <path
         d="M896 42.666667H341.333333c-25.6 0-42.666667 17.066667-42.666666 42.666666v42.666667l341.333333 106.666667L938.666667 128V85.333333c0-25.6-17.066667-42.666667-42.666667-42.666666z"

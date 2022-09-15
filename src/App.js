@@ -14,10 +14,14 @@ const ToBeReview = lazy(() => import("./pages/ToBeReview"));
 const Loading = lazy(() => import("./pages/Loading"));
 const GoWrong404 = lazy(() => import("./pages/GoWrong404"));
 const PersonalPage = lazy(() => import("./pages/PersonalPage"));
+const Project = lazy(() => import("./pages/Project"));
+const Apply = lazy(() => import("./pages/Apply"));
+// const  = lazy(() => import(""));
+// const  = lazy(() => import(""));
+// const  = lazy(() => import(""));
+// const  = lazy(() => import(""));
+// const  = lazy(() => import(""));
 
-// const  = lazy(() => import(""));
-// const  = lazy(() => import(""));
-// const  = lazy(() => import(""));
 // 这个文件不要改动！！！
 // 这个文件不要改动！！！
 // 这个文件不要改动！！！
@@ -55,11 +59,16 @@ function App() {
             <BrowserRouter>
               <Routes>
                 <Route path="/" element={<Login />}></Route>
+                <Route path="PersonalPage" element={<PersonalPage />}></Route>
+
+                {/* <Route path="Home" element={<Apply />}></Route> */}
                 <Route path="Home" element={<Home />}></Route>
                 <Route path="MyItems" element={<MyItems />}></Route>
-                <Route path="PersonalPage" element={<PersonalPage />}></Route>
                 <Route path="ToBeReview" element={<ToBeReview />}></Route>
-                <Route path="MyItems" element={<MyItems />}></Route>
+
+                <Route path="Project" element={<Project />}></Route>
+                <Route path="Apply" element={<Apply />}></Route>
+                {/* <Route path="*" element={<Loading />}></Route> */}
                 <Route path="*" element={<GoWrong404 />}></Route>
               </Routes>
             </BrowserRouter>

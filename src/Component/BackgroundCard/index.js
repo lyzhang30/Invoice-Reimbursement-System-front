@@ -17,11 +17,14 @@ export default function BackgroundCard(props) {
       </div>
       {/* container */}
 
-      <div className="h-5/6 w-full flex-grow min-h-0 shrink flex flex-col justify-start items-center px-14 pt-12">
+      <div
+        className="flex-grow h-5/6 w-full min-h-0 shrink flex flex-col
+       justify-start items-center px-12 pt-8"
+      >
         {/* 中间白色框 */}
         <div
-          className="h-96 w-full min-h-fit flex-grow bg-gray-50
-        flex justify-start items-center p-8"
+          className="h-125 w-full min-h-fit flex-grow 
+        flex justify-start items-center p-5"
           style={{ backgroundColor: "#ffffff" }}
         >
           <div className="h-full w-44 shrink-0">
@@ -39,7 +42,7 @@ export default function BackgroundCard(props) {
       </div>
 
       {/* footer */}
-      <div className="h-14 w-full shrink-0 flex justify-center items-center text-gray-600">
+      <div className="h-10 w-full shrink-0 flex justify-center items-center text-gray-600">
         Shan Tou University
       </div>
     </div>
@@ -81,8 +84,8 @@ function LeftNav() {
         ${isFocus(path, "Home") === true ? "h-full" : "h-0"}`}
         ></div>
       </div>
-      {/* 我的申请按钮 */}
-      {roleName === "用户" && (
+      {/* 我的申请按钮 roleName === "用户" && */}
+      {
         <div className="h-14 w-full flex justify-between items-center space-x-1 pl-1 select-none group">
           <div className={`h-8 w-8 flex justify-center items-center `}>
             <Svg2></Svg2>
@@ -98,9 +101,9 @@ function LeftNav() {
             ${isFocus(path, "MyItems") === true ? "h-full" : "h-0"}`}
           ></div>
         </div>
-      )}
-      {/* 待审核按钮 */}
-      {roleName !== "用户" && roleName !== "管理员" && (
+      }
+      {/* 待审核按钮 roleName !== "用户" && roleName !== "管理员" &&*/}
+      {
         <div className="h-14 w-full flex justify-between items-center space-x-1 pl-1 select-none group">
           <div className={`h-8 w-8 flex justify-center items-center `}>
             <Svg3></Svg3>
@@ -117,9 +120,9 @@ function LeftNav() {
             ${isFocus(path, "ToBeReview") === true ? "h-full" : "h-0"}`}
           ></div>
         </div>
-      )}
-      {/* 项目管理按钮 */}
-      {roleName === "管理员" && (
+      }
+      {/* 项目管理按钮 roleName === "管理员" &&*/}
+      {
         <div className="h-14 w-full flex justify-between items-center space-x-1 pl-1 select-none group">
           <div className={`h-8 w-8 flex justify-center items-center `}>
             <Svg4></Svg4>
@@ -136,9 +139,9 @@ function LeftNav() {
             ${isFocus(path, "xxx") === true ? "h-full" : "h-0"}`}
           ></div>
         </div>
-      )}
-      {/* 账号管理按钮 */}
-      {roleName === "管理员" && (
+      }
+      {/* 账号管理按钮 roleName === "管理员" && */}
+      {
         <div className="h-14 w-full flex justify-between items-center space-x-1 pl-1 select-none group">
           <div className={`h-8 w-8 flex justify-center items-center `}>
             <Svg5></Svg5>
@@ -154,7 +157,7 @@ function LeftNav() {
             ${isFocus(path, "账号管理") === true ? "h-full" : "h-0"}`}
           ></div>
         </div>
-      )}
+      }
     </div>
   );
 }

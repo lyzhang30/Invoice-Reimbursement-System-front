@@ -6,7 +6,7 @@ import axios from "axios";
 import BackgroundCard from "../../Component/BackgroundCard";
 import { ToastContext } from "../../App";
 import { UserInfoContext } from "../../App";
-import { GET_INFO_BY_TOKEN } from "../../utils/mapPath";
+import { GET_INFO_BY_TOKEN, UPDATE_USER } from "../../utils/mapPath";
 import { Svg8 as Svg } from "../../svg";
 
 const InputLabel = styled.div`
@@ -44,6 +44,7 @@ export function usePersonalInformation() {
   const [location, setLocation] = useState(undefined);
   const [tel, setTel] = useState(undefined);
   const [roleName, setRoleName] = useState(undefined);
+  const [id, setId] = useState(undefined);
   const { UserInfo, setUserInfo } = useContext(UserInfoContext);
 
   useEffect(() => {
@@ -54,21 +55,17 @@ export function usePersonalInformation() {
         url: GET_INFO_BY_TOKEN,
         method: "GET",
         headers: {
-          "content-type": "x-www-form-urlencoded",
+          "content-type": "application/x-www-form-urlencoded",
           Authorization: token,
         },
       };
       const res = await axios(options);
 
       if (res.data.code === 200) {
-        toastController({
-          mes: "登录成功!",
-          timeout: 1000,
-        });
-
         const ans = res.data.data;
         setMail(ans.email);
         setUserName(ans.userName);
+        setId(ans.id);
         setName(ans.name);
         setLocation(ans.linkedAddress);
         setTel(ans.phone);
@@ -84,12 +81,13 @@ export function usePersonalInformation() {
       }
     };
 
-    if (UserInfo === undefined) {
+    if (UserInfo === undefined || UserInfo.name === undefined) {
       fetchData();
     } else {
       setLocation(UserInfo.location);
       setMail(UserInfo.mail);
       setName(UserInfo.name);
+      setId(UserInfo.id);
       setRoleName(UserInfo.roleName);
       setTel(UserInfo.tel);
       setUserName(UserInfo.userName);
@@ -97,12 +95,14 @@ export function usePersonalInformation() {
   }, []);
 
   useEffect(() => {
-    setUserInfo({ mail, userName, name, location, tel, roleName });
-  }, [mail, userName, name, location, tel, roleName, setUserInfo]);
+    setUserInfo({ mail, userName, id, name, location, tel, roleName });
+  }, [mail, userName, id, name, location, tel, roleName, setUserInfo]);
+
   return {
     mail,
     userName,
     name,
+    id,
     location,
     tel,
     roleName,
@@ -110,7 +110,7 @@ export function usePersonalInformation() {
     setLocation,
     setMail,
     setTel,
-    setUserName,
+    setName,
   };
 }
 
@@ -120,20 +120,46 @@ export default function PersonalPage() {
     location,
     mail,
     tel,
+    id,
     userName,
     name,
     roleName,
     setLocation,
     setMail,
     setTel,
-    setUserName,
+    setName,
   } = usePersonalInformation();
 
   const handleInformationUpload = async () => {
-    toastController({
-      mes: "修改失败，若反复遇到该问题，请联系管理员",
-      timeout: 3000,
-    });
+    let token = localStorage.getItem("token");
+
+    const options = {
+      url: UPDATE_USER,
+      method: "POST",
+      headers: {
+        "content-type": "application/x-www-form-urlencoded",
+        Authorization: token,
+      },
+      params: {
+        name: name,
+        phone: tel,
+        email: mail,
+        id: id,
+        linkedAddress: location,
+      },
+    };
+    const ans = await axios(options);
+    if (ans.data.code === 200) {
+      toastController({
+        mes: ans.data.data,
+        timeout: 3000,
+      });
+    } else {
+      toastController({
+        mes: "修改失败，若反复遇到该问题，请联系管理员",
+        timeout: 3000,
+      });
+    }
   };
 
   return (
@@ -142,28 +168,28 @@ export default function PersonalPage() {
         <div className="h-full w-full min-h-0 px-6 shrink-0 flex justify-between items-center">
           {/* left */}
           <div className="h-full w-8/12 pl-8 pr-12">
-            <div className="h-14 w-full text-gray-600 text-2xl select-none">
+            <div className="h-10 w-full text-gray-600 text-2xl select-none">
               您以{" "}
               <span className="text-blue-600 bg-gray-100 px-5 py-1 rounded">
-                {name}
+                {userName}
               </span>{" "}
               身份登录
             </div>
-            <div className="h-20 w-full text-blue-400  select-none">{`[ ${roleName}账号 ]`}</div>
+            <div className="h-12 w-full text-blue-400  select-none">{`[ ${roleName}账号 ]`}</div>
             {/* 昵称： */}
-            <div className="w-full py-4">
+            <div className="w-full py-2">
               <InputLabel className="select-none">昵称：</InputLabel>
               <MyInput
                 className="outline-none focus:ring-2 hover:ring-1 transition-all"
                 type="text"
-                value={userName !== undefined ? userName : ""}
+                value={name !== undefined ? name : ""}
                 onChange={(e) => {
-                  setUserName(e.target.value);
+                  setName(e.target.value);
                 }}
               />
             </div>
             {/* 邮箱： */}
-            <div className="w-full py-4">
+            <div className="w-full py-2">
               <InputLabel className="">邮箱：</InputLabel>
               <MyInput
                 className="outline-none focus:ring-2 hover:ring-1 transition-all"
@@ -175,7 +201,7 @@ export default function PersonalPage() {
               />
             </div>
             {/* 手机号码： */}
-            <div className="w-full py-4">
+            <div className="w-full py-2">
               <InputLabel className="">手机号码：</InputLabel>
               <MyInput
                 className="outline-none focus:ring-2 hover:ring-1 transition-all"
@@ -187,7 +213,7 @@ export default function PersonalPage() {
               />
             </div>
             {/* 联系地址： */}
-            <div className="w-full py-4">
+            <div className="w-full py-2">
               <InputLabel className="">联系地址：</InputLabel>
               <MyInput
                 className="outline-none focus:ring-2 hover:ring-1 transition-all"

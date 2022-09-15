@@ -1,5 +1,5 @@
 import React from "react";
-import { useContext, useRef, useEffect } from "react";
+import { useContext, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { ToastContext } from "../../App";
 import { UserInfoContext } from "../../App";
@@ -52,39 +52,31 @@ export default function Login(props) {
     const params = new URLSearchParams();
     params.append("userName", usrInput.current.value);
     params.append("password", passwordInput.current.value);
-    const res = await axios.post(LOGIN, params);
+    const ans = await axios.post(LOGIN, params);
     // 登陆成功
-    if (res.data.code === 200) {
+    if (ans.data.code === 200) {
       ToastController({
-        mes: "登录成功!",
+        mes: `欢迎回来，${ans.data.data.userDto.userName} ！`,
         timeout: 1000,
       });
-      const ans = JSON.parse(res.data.data);
+      // const ans = JSON.parse(res.data.data);
       // console.log(ans.token);
-      localStorage.setItem("token", ans.token);
       // let token = localStorage.getItem("token");
+      localStorage.setItem("token", ans.data.data.token);
 
-      console.log(ans.userDto.name);
+      console.log(ans.data.data.userDto.name);
       setUserInfo({
-        id: ans.userDto.id,
-        roleName: ans.userDto.roleName,
-        userName: ans.userDto.userName,
-        name: ans.userDto.name,
-        mail: ans.userDto.email,
-        location: ans.userDto.location,
-        tel: ans.userDto.phone,
+        id: ans.data.data.userDto.id,
+        roleName: ans.data.data.userDto.roleName,
+        userName: ans.data.data.userDto.userName,
+        name: ans.data.data.userDto.name,
+        mail: ans.data.data.userDto.email,
+        location: ans.data.data.userDto.location,
+        tel: ans.data.data.userDto.phone,
       });
-
-      // setUserInfo({
-      //   id: 15,
-      //   roleName: "财务",
-      //   name: "胡毅薇",
-      //   email: "hywei@stu.edu.cn",
-      // });
 
       setTimeout(() => {
         navigate("Home");
-        // navigate(-1);
       }, 1000);
     }
     //登录失败
@@ -103,7 +95,7 @@ export default function Login(props) {
     <div className="h-screen w-screen flex justify-center items-center bg-gray-100">
       {/* 背景图 */}
       <div
-        className=" rounded flex justify-start items-center px-52 shrink-0"
+        className=" rounded flex justify-start items-center px-48 shrink-0"
         style={{
           height: "90%",
           width: "95%",
@@ -111,14 +103,13 @@ export default function Login(props) {
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
           backgroundPosition: "center",
-          // boxShadow: "-8px -8px 5px 0px rgba(200,200,200,0.8)",
         }}
       >
         <div className="h-5/6 w-5/12 min-w-fit flex flex-col justify-start items-center shrink-0 space-y-32">
           <h1 className="text-gray-600 text-7xl">汕大财务报销系统</h1>
           {/* 登录框 */}
           <div
-            className="h-3/6 w-10/12 bg-gray-300 round flex flex-col justify-start items-center rounded-2xl
+            className="h-80 w-10/12 bg-gray-300 round flex flex-col justify-start items-center rounded-2xl
         bg-opacity-80 p-5 space-y-3"
             style={{
               backdropFilter: "blur(5px)",
@@ -134,7 +125,7 @@ export default function Login(props) {
                 type="text"
                 ref={usrInput}
                 onKeyUp={enterLogin}
-                className="h-3/5 w-7/12 flex-grow px-5 text-gray-600 py-2 rounded border focus:outline-none focus:ring-2"
+                className="h-3/5 w-7/12 flex-grow px-5 text-xl text-gray-600 py-2 rounded border focus:outline-none focus:ring-2"
               />
             </div>
             <div
@@ -146,7 +137,7 @@ export default function Login(props) {
                 type="text"
                 ref={passwordInput}
                 onKeyUp={enterLogin}
-                className="h-3/5 w-7/12 flex-grow px-5 text-gray-600 py-2 rounded border focus:outline-none focus:ring-2"
+                className="h-3/5 w-7/12 flex-grow px-5 text-xl text-gray-600 py-2 rounded border focus:outline-none focus:ring-2"
               />
             </div>
             <button

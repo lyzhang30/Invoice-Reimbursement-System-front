@@ -1,5 +1,5 @@
 import React from "react";
-import { Svg7 as Svg } from "../../svg";
+import { LoadingSvg as Svg } from "../../svg";
 
 export default function index() {
   return (
@@ -7,9 +7,9 @@ export default function index() {
       className="fixed flex  justify-center items-center w-screen h-screen bg-opacity-90"
       style={{ backgroundColor: "#d8e9fd" }}
     >
-      <p className="text-9xl text-gray-500 font-bold">Loading</p>
-      <div className="h-96 w-96 flex justify-center items-center">
-        <Svg className="animate-spin-slow"></Svg>
+      <p className="text-7xl text-gray-500 font-bold">Loading</p>
+      <div className="h-60 w-60 flex justify-center items-center">
+        <Svg className="animate-spin-slow" size={180}></Svg>
       </div>
     </div>
   );
