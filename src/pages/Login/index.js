@@ -134,7 +134,7 @@ export default function Login(props) {
             >
               <p>密码:</p>
               <input
-                type="text"
+                type="password"
                 ref={passwordInput}
                 onKeyUp={enterLogin}
                 className="h-3/5 w-7/12 flex-grow px-5 text-xl text-gray-600 py-2 rounded border focus:outline-none focus:ring-2"
