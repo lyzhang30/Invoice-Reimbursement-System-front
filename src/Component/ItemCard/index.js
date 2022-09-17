@@ -1,13 +1,17 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 //模板中项目卡片
-//props: name , content , startTime , endTime
+//props: id, name , content , startTime , endTime
 export default function ItemCard(props) {
+  const navigate = useNavigate();
   return (
     <div
       className="h-60 w-full  flex-col justify-between items-start p-5
      bg-blue-50 rounded transition-all duration-200 hover:bg-blue-100"
+      onClick={() => {
+        navigate("/Project");
+      }}
     >
       <Link
         to={`/Project`}

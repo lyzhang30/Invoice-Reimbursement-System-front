@@ -67,7 +67,7 @@ function App() {
                 <Route path="ToBeReview" element={<ToBeReview />}></Route>
 
                 <Route path="Project" element={<Project />}></Route>
-                <Route path="Apply" element={<Apply />}></Route>
+                <Route path="Apply/:id" element={<Apply />}></Route>
                 {/* <Route path="*" element={<Loading />}></Route> */}
                 <Route path="*" element={<GoWrong404 />}></Route>
               </Routes>

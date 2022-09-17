@@ -36,7 +36,7 @@ export default function Project() {
   });
 
   function applyClick() {
-    navigate("/Apply");
+    navigate(`/Apply/1`);
   }
 
   return (
@@ -49,7 +49,7 @@ export default function Project() {
             </div>
             {/* 申请按钮 */}
             <div
-              className="h-10 w-28 flex bg-blue-100 float-right justify-center items-center
+              className="h-10 w-28 flex bg-blue-100 float-right justify-center items-center select-none
              text-lg tracking-widest text-sky-700 rounded transition-all duration-500 hover:bg-blue-200"
               onClick={applyClick}
             >

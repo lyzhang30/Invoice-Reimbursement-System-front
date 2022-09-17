@@ -1,13 +1,15 @@
 import React from "react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import BackgroundCard from "../../Component/BackgroundCard";
 import { ReviewSvg } from "../../svg";
 
 // 待审核页面
 export default function ToBeReview() {
+  const navigate = useNavigate();
   const [list, setList] = useState([
     {
+      id: 1,
       project: "大创",
       name: "胡毅薇",
       email: "184972937@qq.com",
@@ -15,6 +17,7 @@ export default function ToBeReview() {
       nowState: "已提交",
     },
     {
+      id: 2,
       project: "数学建模",
       name: "张连勇",
       email: "1812843637@qq.com",
@@ -22,6 +25,7 @@ export default function ToBeReview() {
       nowState: "已提交",
     },
     {
+      id: 3,
       project: "泰迪杯",
       name: "章学榕",
       email: "9832645317@qq.com",
@@ -40,6 +44,9 @@ export default function ToBeReview() {
                 <div
                   className="h-28 w-full bg-sky-50 rounded py-3 px-6
                  flex justify-between items-center mb-3"
+                  onClick={() => {
+                    navigate(``);
+                  }}
                 >
                   {/* left */}
                   <div className="h-full w-10/12 bg-red-10 pr-3">

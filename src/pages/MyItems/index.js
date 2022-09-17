@@ -1,19 +1,22 @@
 import React from "react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import BackgroundCard from "../../Component/BackgroundCard";
 import { ItemSvg } from "../../svg";
 
 // 我的申请页面（只有身份为student才可看到）
 export default function MyItems() {
+  const navigate = useNavigate();
   const [list, setList] = useState([
     {
+      id: 1,
       project: "大创",
       detail:
         "申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情.",
       nowState: "已提交",
     },
     {
+      id: 2,
       project: "数学建模",
       detail:
         "申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情.",
@@ -32,6 +35,9 @@ export default function MyItems() {
                 <div
                   className="h-32 w-full bg-sky-50 rounded py-3 px-6
                  flex justify-between items-center mb-3"
+                  onClick={() => {
+                    navigate(`/Apply/${item.id}`);
+                  }}
                 >
                   {/* left */}
                   <div className="h-full w-10/12 bg-red-10 pr-3">

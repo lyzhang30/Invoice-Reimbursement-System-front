@@ -6,7 +6,11 @@ import axios from "axios";
 import BackgroundCard from "../../Component/BackgroundCard";
 import { ToastContext } from "../../App";
 import { UserInfoContext } from "../../App";
-import { GET_INFO_BY_TOKEN, UPDATE_USER } from "../../utils/mapPath";
+import {
+  GET_INFO_BY_TOKEN,
+  UPDATE_USER,
+  GET_LOGIN_OUT,
+} from "../../utils/mapPath";
 import { Svg8 as Svg } from "../../svg";
 
 const InputLabel = styled.div`
@@ -115,6 +119,7 @@ export function usePersonalInformation() {
 }
 
 export default function PersonalPage() {
+  const navigate = useNavigate();
   const toastController = useContext(ToastContext);
   const {
     location,
@@ -156,7 +161,38 @@ export default function PersonalPage() {
       });
     } else {
       toastController({
-        mes: "修改失败，若反复遇到该问题，请联系管理员",
+        mes: "修改失败，请刷新页面重试一下~",
+        timeout: 3000,
+      });
+    }
+  };
+
+  const handleLoginOut = async () => {
+    let token = localStorage.getItem("token");
+
+    const options = {
+      url: GET_LOGIN_OUT,
+      method: "GET",
+      headers: {
+        "content-type": "application/x-www-form-urlencoded",
+        Authorization: token,
+      },
+      params: {
+        userName: userName,
+      },
+    };
+    const ans = await axios(options);
+    if (ans.data.code === 200) {
+      toastController({
+        mes: ans.data.data,
+        timeout: 3000,
+      });
+      setTimeout(() => {
+        navigate("/");
+      }, 1500);
+    } else {
+      toastController({
+        mes: "退出失败",
         timeout: 3000,
       });
     }
@@ -238,7 +274,15 @@ export default function PersonalPage() {
           </div>
 
           {/* right */}
-          <div className="h-full w-4/12 flex-grow bg-gray-200"></div>
+          <div className="relative h-full w-4/12 flex-grow bg-gray-200">
+            <div
+              className="absolute h-9 w-28 rounded bg-red-50 transition-all duration-300 hover:bg-red-100
+            flex justify-center items-center bottom-2 right-2 text-blue-600 select-none"
+              onClick={handleLoginOut}
+            >
+              退出登录
+            </div>
+          </div>
         </div>
       </BackgroundCard>
     </>
