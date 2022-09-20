@@ -128,7 +128,7 @@ function LeftNav() {
             <Svg4></Svg4>
           </div>
           <Link
-            to={``}
+            to={`/ProjectManagement`}
             className={`h-full w-10 flex-grow flex justify-start items-center text-blue-500
         `}
           >
@@ -136,7 +136,7 @@ function LeftNav() {
           </Link>
           <div
             className={` w-0 border-l-4 border-blue-600 transition-all duration-500 group-hover:h-full
-            ${isFocus(path, "xxx") === true ? "h-full" : "h-0"}`}
+            ${isFocus(path, "ProjectManagement") === true ? "h-full" : "h-0"}`}
           ></div>
         </div>
       }
@@ -147,14 +147,14 @@ function LeftNav() {
             <Svg5></Svg5>
           </div>
           <Link
-            to={``}
+            to={`/UserManagement`}
             className={`h-full w-10 flex-grow flex justify-start items-center text-blue-500`}
           >
             账号管理
           </Link>
           <div
             className={` w-0 border-l-4 border-blue-600 transition-all duration-500 group-hover:h-full
-            ${isFocus(path, "账号管理") === true ? "h-full" : "h-0"}`}
+            ${isFocus(path, "UserManagement") === true ? "h-full" : "h-0"}`}
           ></div>
         </div>
       }

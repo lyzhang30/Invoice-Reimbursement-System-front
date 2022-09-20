@@ -16,10 +16,10 @@ const GoWrong404 = lazy(() => import("./pages/GoWrong404"));
 const PersonalPage = lazy(() => import("./pages/PersonalPage"));
 const Project = lazy(() => import("./pages/Project"));
 const Apply = lazy(() => import("./pages/Apply"));
-// const  = lazy(() => import(""));
-// const  = lazy(() => import(""));
-// const  = lazy(() => import(""));
-// const  = lazy(() => import(""));
+const Examine = lazy(() => import("./pages/Examine"));
+const ProjectManagement = lazy(() => import("./pages/ProjectManagement"));
+const UserManagement = lazy(() => import("./pages/UserManagement"));
+const ProjectModify = lazy(() => import("./pages/ProjectModify"));
 // const  = lazy(() => import(""));
 
 // 这个文件不要改动！！！
@@ -68,7 +68,19 @@ function App() {
 
                 <Route path="Project" element={<Project />}></Route>
                 <Route path="Apply/:id" element={<Apply />}></Route>
-                {/* <Route path="*" element={<Loading />}></Route> */}
+                <Route path="Examine/:id" element={<Examine />}></Route>
+                <Route
+                  path="ProjectManagement"
+                  element={<ProjectManagement />}
+                ></Route>
+                <Route
+                  path="ProjectModify/:id"
+                  element={<ProjectModify />}
+                ></Route>
+                <Route
+                  path="UserManagement"
+                  element={<UserManagement />}
+                ></Route>
                 <Route path="*" element={<GoWrong404 />}></Route>
               </Routes>
             </BrowserRouter>

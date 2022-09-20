@@ -8,8 +8,8 @@ export default function Home() {
     <>
       <BackgroundCard>
         <div
-          className="h-auto w-full min-h-0  shrink-0 grid grid-flow-row grid-cols-4
-         gap-14 auto-cols-fr place-items-center"
+          className="h-auto w-full min-h-0  shrink-0 grid grid-flow-row grid-cols-3
+         gap-8 auto-cols-fr place-items-center"
         >
           <ItemCard></ItemCard>
           <ItemCard></ItemCard>

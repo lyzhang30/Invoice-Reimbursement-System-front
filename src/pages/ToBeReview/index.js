@@ -45,7 +45,7 @@ export default function ToBeReview() {
                   className="h-28 w-full bg-sky-50 rounded py-3 px-6
                  flex justify-between items-center mb-3"
                   onClick={() => {
-                    navigate(``);
+                    navigate(`/Examine/1`);
                   }}
                 >
                   {/* left */}
