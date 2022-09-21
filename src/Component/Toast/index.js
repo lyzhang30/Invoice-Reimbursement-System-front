@@ -10,7 +10,7 @@ const Container = styled.div`
   color: #3b55ff;
   transform: translate(-50%, -50%);
   line-height: 1.5rem;
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(255, 255, 255, 0.8);
   padding: 0.6rem 1.2rem 0.6rem 1.2rem;
   border-radius: 0.625rem;
   font-weight: 400;

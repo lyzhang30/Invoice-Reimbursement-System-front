@@ -1,11 +1,6 @@
 import React, { useState, Suspense, lazy } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
-// import Home from "./pages/Home";
-// import MyItems from "./pages/MyItems";
-// import ToBeReview from "./pages/ToBeReview";
-// import Loading from "./pages/Loading";
-// import GoWrong404 from "./pages/GoWrong404";
 import Toast from "./Component/Toast";
 
 const Home = lazy(() => import("./pages/Home"));
@@ -20,6 +15,11 @@ const Examine = lazy(() => import("./pages/Examine"));
 const ProjectManagement = lazy(() => import("./pages/ProjectManagement"));
 const UserManagement = lazy(() => import("./pages/UserManagement"));
 const ProjectModify = lazy(() => import("./pages/ProjectModify"));
+const AddUser = lazy(() => import("./pages/AddUser"));
+const SelectUser = lazy(() => import("./pages/SelectUser"));
+const ModifyUser = lazy(() => import("./pages/ModifyUser"));
+const DeleteUser = lazy(() => import("./pages/DeleteUser"));
+// const  = lazy(() => import(""));
 // const  = lazy(() => import(""));
 
 // 这个文件不要改动！！！
@@ -77,10 +77,13 @@ function App() {
                   path="ProjectModify/:id"
                   element={<ProjectModify />}
                 ></Route>
-                <Route
-                  path="UserManagement"
-                  element={<UserManagement />}
-                ></Route>
+                {/* 账户管理 */}
+                <Route path="UserManagement" element={<UserManagement />}>
+                  <Route path="AddUser" element={<AddUser />} />
+                  <Route path="SelectUser" element={<SelectUser />} />
+                  <Route path="ModifyUser" element={<ModifyUser />} />
+                  <Route path="DeleteUser" element={<DeleteUser />} />
+                </Route>
                 <Route path="*" element={<GoWrong404 />}></Route>
               </Routes>
             </BrowserRouter>

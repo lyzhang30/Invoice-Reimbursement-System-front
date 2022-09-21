@@ -95,7 +95,7 @@ export default function Login(props) {
     <div className="h-screen w-screen flex justify-center items-center bg-gray-100">
       {/* 背景图 */}
       <div
-        className=" rounded flex justify-start items-center px-48 shrink-0"
+        className=" rounded flex justify-start items-center px-20 shrink-0"
         style={{
           height: "90%",
           width: "95%",
@@ -105,20 +105,20 @@ export default function Login(props) {
           backgroundPosition: "center",
         }}
       >
-        <div className="h-5/6 w-5/12 min-w-fit flex flex-col justify-start items-center shrink-0 space-y-32">
-          <h1 className="text-gray-600 text-7xl">汕大财务报销系统</h1>
+        <div className="h-5/6 w-110 min-w-fit flex flex-col justify-start items-center shrink-0 space-y-24">
+          <h1 className="text-gray-600 text-6xl">汕大财务报销系统</h1>
           {/* 登录框 */}
           <div
-            className="h-80 w-10/12 bg-gray-300 round flex flex-col justify-start items-center rounded-2xl
+            className="h-80 w-100 bg-gray-300 round flex flex-col justify-start items-center rounded-2xl
         bg-opacity-80 p-5 space-y-3"
             style={{
               backdropFilter: "blur(5px)",
             }}
           >
-            <h2 className="text-4xl text-gray-500 my-3">登录</h2>
+            <h2 className="text-3xl text-gray-500 my-3">登录</h2>
             <div
               className="h-20 w-full bg-pink-10 flex justify-start items-center text-gray-500 
-            text-3xl space-x-5"
+            text-2xl space-x-5"
             >
               <p>账号:</p>
               <input
@@ -130,7 +130,7 @@ export default function Login(props) {
             </div>
             <div
               className="h-20 w-full bg-pink-10 flex justify-start items-center text-gray-500 
-            text-3xl space-x-5"
+            text-2xl space-x-5"
             >
               <p>密码:</p>
               <input

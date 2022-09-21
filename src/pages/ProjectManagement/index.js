@@ -179,7 +179,7 @@ export default function ProjectManagement() {
             list.map((item) => {
               return (
                 <div
-                  className="h-60 w-full p-5 relative
+                  className="h-60 w-full p-5 relative select-none
              bg-blue-50 rounded transition-all duration-200 hover:bg-blue-100"
                 >
                   <div

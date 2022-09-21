@@ -33,7 +33,7 @@ export default function BackgroundCard(props) {
           {/* 分割线 */}
           <div className="h-full border-l-2 border-gray-200"></div>
           <div
-            className="h-full w-1/2 flex-grow shrink-0 min-w-0 px-3 flex flex-col
+            className="h-full flex-grow w-1/2 shrink-0 min-w-0 px-3 flex flex-col
              justify-start items-center overflow-y-scroll overflow-x-hidden"
           >
             {props.children}
@@ -147,7 +147,7 @@ function LeftNav() {
             <Svg5></Svg5>
           </div>
           <Link
-            to={`/UserManagement`}
+            to={`/UserManagement/AddUser`}
             className={`h-full w-10 flex-grow flex justify-start items-center text-blue-500`}
           >
             账号管理

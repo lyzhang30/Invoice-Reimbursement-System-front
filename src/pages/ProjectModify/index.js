@@ -52,7 +52,7 @@ export default function ProjectModify() {
           <textarea
             cols="105"
             rows="15"
-            className="p-3 h-72 w-11/12 bg-sky-50 mt-2"
+            className="p-3 h-64 w-11/12 bg-sky-50 mt-2"
           ></textarea>
           <p className="text-red-700 w-fit m-0">注意：所有均为必填项</p>
           {/* 确定按钮 */}
