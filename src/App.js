@@ -66,7 +66,7 @@ function App() {
                 <Route path="MyItems" element={<MyItems />}></Route>
                 <Route path="ToBeReview" element={<ToBeReview />}></Route>
 
-                <Route path="Project" element={<Project />}></Route>
+                <Route path="Project/:id" element={<Project />}></Route>
                 <Route path="Apply/:id" element={<Apply />}></Route>
                 <Route path="Examine/:id" element={<Examine />}></Route>
                 <Route

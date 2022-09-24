@@ -1,6 +1,9 @@
-import React from "react";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useContext, useState, useEffect } from "react";
+import { ToastContext } from "../../App";
+import { POST_REMOVE_A_PROJECT, GET_ALL_PROJECT } from "../../utils/mapPath";
+import axios from "axios";
+import { usePersonalInformation } from "../PersonalPage";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { BackSvg, AddSvg, CancelSvg, SubmitSvg, CloseSvg } from "../../svg";
 import BackgroundCard from "../../Component/BackgroundCard";
 import ItemCard from "../../Component/ItemCard";
@@ -8,94 +11,164 @@ import ItemCard from "../../Component/ItemCard";
 // TODO:获取所有项目的列表
 export default function ProjectManagement() {
   const navigate = useNavigate();
+  const toastController = useContext(ToastContext);
+  const [list, setList] = useState([]);
   const [showAddWin, setShowAddWin] = useState(false);
   const [showModifyWin, setShowModifyWin] = useState(false);
-  const [list, setList] = useState([
-    {
-      id: 1,
-      projectName: "大创",
-      detail:
-        "申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情.",
-      startTime: "2022-09-01",
-      endTime: "2022-09-10",
-    },
-    {
-      id: 2,
-      projectName: "数学建模",
-      detail:
-        "申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情.",
-      startTime: "2022-09-01",
-      endTime: "2022-09-10",
-    },
-    {
-      id: 2,
-      projectName: "数学建模",
-      detail:
-        "申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情.",
-      startTime: "2022-09-01",
-      endTime: "2022-09-10",
-    },
-    {
-      id: 2,
-      projectName: "数学建模",
-      detail:
-        "申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情.",
-      startTime: "2022-09-01",
-      endTime: "2022-09-10",
-    },
-    {
-      id: 2,
-      projectName: "数学建模",
-      detail:
-        "申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情.",
-      startTime: "2022-09-01",
-      endTime: "2022-09-10",
-    },
-    {
-      id: 2,
-      projectName: "数学建模",
-      detail:
-        "申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情.",
-      startTime: "2022-09-01",
-      endTime: "2022-09-10",
-    },
-    {
-      id: 2,
-      projectName: "数学建模",
-      detail:
-        "申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情.",
-      startTime: "2022-09-01",
-      endTime: "2022-09-10",
-    },
-    {
-      id: 2,
-      projectName: "数学建模",
-      detail:
-        "申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情.",
-      startTime: "2022-09-01",
-      endTime: "2022-09-10",
-    },
-    {
-      id: 2,
-      projectName: "数学建模",
-      detail:
-        "申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情.",
-      startTime: "2022-09-01",
-      endTime: "2022-09-10",
-    },
-  ]);
+  // const [list, setList] = useState([
+  //   {
+  //     id: 1,
+  //     projectName: "大创",
+  //     detail:
+  //       "申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情.",
+  //     startTime: "2022-09-01",
+  //     endTime: "2022-09-10",
+  //   },
+  //   {
+  //     id: 2,
+  //     projectName: "数学建模",
+  //     detail:
+  //       "申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情.",
+  //     startTime: "2022-09-01",
+  //     endTime: "2022-09-10",
+  //   },
+  //   {
+  //     id: 2,
+  //     projectName: "数学建模",
+  //     detail:
+  //       "申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情.",
+  //     startTime: "2022-09-01",
+  //     endTime: "2022-09-10",
+  //   },
+  //   {
+  //     id: 2,
+  //     projectName: "数学建模",
+  //     detail:
+  //       "申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情.",
+  //     startTime: "2022-09-01",
+  //     endTime: "2022-09-10",
+  //   },
+  //   {
+  //     id: 2,
+  //     projectName: "数学建模",
+  //     detail:
+  //       "申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情.",
+  //     startTime: "2022-09-01",
+  //     endTime: "2022-09-10",
+  //   },
+  //   {
+  //     id: 2,
+  //     projectName: "数学建模",
+  //     detail:
+  //       "申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情.",
+  //     startTime: "2022-09-01",
+  //     endTime: "2022-09-10",
+  //   },
+  //   {
+  //     id: 2,
+  //     projectName: "数学建模",
+  //     detail:
+  //       "申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情.",
+  //     startTime: "2022-09-01",
+  //     endTime: "2022-09-10",
+  //   },
+  //   {
+  //     id: 2,
+  //     projectName: "数学建模",
+  //     detail:
+  //       "申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情.",
+  //     startTime: "2022-09-01",
+  //     endTime: "2022-09-10",
+  //   },
+  //   {
+  //     id: 2,
+  //     projectName: "数学建模",
+  //     detail:
+  //       "申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情.",
+  //     startTime: "2022-09-01",
+  //     endTime: "2022-09-10",
+  //   },
+  // ]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      let token = localStorage.getItem("token");
+      const options = {
+        url: GET_ALL_PROJECT,
+        method: "GET",
+        headers: {
+          "content-type": "application/x-www-form-urlencoded",
+          Authorization: token,
+        },
+        data: {
+          Authorization: token,
+        },
+      };
+      const res = await axios(options);
+
+      if (res.data.code === 200) {
+        setList(res.data.data);
+        console.log(res.data.data);
+      } else {
+        toastController({
+          mes: "请求失败!",
+          timeout: 1000,
+        });
+      }
+    };
+
+    fetchData();
+  }, [toastController]);
 
   function handleAdd() {
     setShowAddWin(true);
   }
 
-  function handleExitAdd() {
-    setShowAddWin(false);
+  function handleDelete(id) {
+    const fun = async () => {
+      let token = localStorage.getItem("token");
+      console.log(id);
+      const options = {
+        url: POST_REMOVE_A_PROJECT,
+        method: "POST",
+        headers: {
+          "content-type": "application/x-www-form-urlencoded",
+          Authorization: token,
+        },
+        data: {
+          id: id,
+        },
+        params: {
+          id: id,
+        },
+      };
+      const res = await axios(options);
+      if (res.data.code === 200) {
+        toastController({
+          mes: "撤销成功!",
+          timeout: 1000,
+        });
+      } else {
+        toastController({
+          mes: "撤销失败!",
+          timeout: 1000,
+        });
+      }
+      //回到我的申请页面
+      setTimeout(() => {
+        navigate("/MyItems");
+      }, 1000);
+    };
+    fun();
   }
 
-  function handleDetermineAdd() {
+  const handleExitAdd = () => {
     setShowAddWin(false);
-  }
+  };
+
+  const handleDetermineAdd = () => {
+    setShowAddWin(false);
+  };
 
   return (
     <>
@@ -167,9 +240,7 @@ export default function ProjectManagement() {
           <div
             className="h-60 w-full p-5 flex justify-center items-center opacity-30 space-x-5
              bg-blue-300 rounded transition-all duration-200 hover:bg-blue-400 text-5xl select-none"
-            onClick={() => {
-              setShowAddWin(true);
-            }}
+            onClick={handleAdd}
           >
             <AddSvg size={150}></AddSvg>
             添加报销项目
@@ -186,12 +257,15 @@ export default function ProjectManagement() {
                     className="h-12 w-fit max-w-full text-blue-600 text-3xl 
                font-bold truncate px-5 transition-all duration-200 hover:scale-x-110 hover:translate-x-3 hover:text-gray-700"
                   >
-                    {item.projectName}
+                    {item.categoryName}
                   </div>
                   {/* 删除按钮 */}
                   <div
                     className="h-9 w-fit absolute flex justify-center items-center bg-red-200
                    rounded px-3 top-6 right-5 select-none transition-all duration-300 hover:bg-red-300"
+                    onClick={() => {
+                      handleDelete(item.id);
+                    }}
                   >
                     删除
                   </div>
@@ -212,7 +286,7 @@ export default function ProjectManagement() {
                     className="h-20 py-1 px-2 w-full flex-grow select-none block 
                 bg-white overflow-hidden break-all text-gray-500"
                   >
-                    {item.detail}
+                    {item.remark}
                   </div>
 
                   <div className="h-8 mt-2 text-gray-600 select-none float-right">

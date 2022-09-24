@@ -1,38 +1,74 @@
-import React from "react";
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useContext, useState, useEffect } from "react";
+import { ToastContext } from "../../App";
+import { GET_ALL_TO_BE_REVIEW } from "../../utils/mapPath";
+import axios from "axios";
+import { usePersonalInformation } from "../PersonalPage";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import BackgroundCard from "../../Component/BackgroundCard";
 import { ReviewSvg } from "../../svg";
 
 // 待审核页面
 export default function ToBeReview() {
   const navigate = useNavigate();
-  const [list, setList] = useState([
-    {
-      id: 1,
-      project: "大创",
-      name: "胡毅薇",
-      email: "184972937@qq.com",
-      tel: "13825864567",
-      nowState: "已提交",
-    },
-    {
-      id: 2,
-      project: "数学建模",
-      name: "张连勇",
-      email: "1812843637@qq.com",
-      tel: "13496564567",
-      nowState: "已提交",
-    },
-    {
-      id: 3,
-      project: "泰迪杯",
-      name: "章学榕",
-      email: "9832645317@qq.com",
-      tel: "45572568751",
-      nowState: "已提交",
-    },
-  ]);
+  const toastController = useContext(ToastContext);
+  const [list, setList] = useState([]);
+  usePersonalInformation();
+  // const [list, setList] = useState([
+  //   {
+  //     id: 1,
+  //     project: "大创",
+  //     name: "胡毅薇",
+  //     email: "184972937@qq.com",
+  //     tel: "13825864567",
+  //     nowState: "已提交",
+  //   },
+  //   {
+  //     id: 2,
+  //     project: "数学建模",
+  //     name: "张连勇",
+  //     email: "1812843637@qq.com",
+  //     tel: "13496564567",
+  //     nowState: "已提交",
+  //   },
+  //   {
+  //     id: 3,
+  //     project: "泰迪杯",
+  //     name: "章学榕",
+  //     email: "9832645317@qq.com",
+  //     tel: "45572568751",
+  //     nowState: "已提交",
+  //   },
+  // ]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      let token = localStorage.getItem("token");
+      const options = {
+        url: GET_ALL_TO_BE_REVIEW,
+        method: "GET",
+        headers: {
+          "content-type": "application/x-www-form-urlencoded",
+          Authorization: token,
+        },
+        data: {
+          Authorization: token,
+        },
+      };
+      const res = await axios(options);
+
+      if (res.data.code === 200) {
+        setList(res.data.data);
+      } else {
+        toastController({
+          mes: res.data.message,
+          timeout: 1000,
+        });
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <>
       <BackgroundCard>
@@ -45,7 +81,7 @@ export default function ToBeReview() {
                   className="h-28 w-full bg-sky-50 rounded py-3 px-6
                  flex justify-between items-center mb-3"
                   onClick={() => {
-                    navigate(`/Examine/1`);
+                    navigate(`/Examine/${item.id}`);
                   }}
                 >
                   {/* left */}
@@ -54,29 +90,22 @@ export default function ToBeReview() {
                       {item.project}
                     </p>
                     <p className="h-fit w-fit text-gray-500 pt-1 overflow-hidden">
-                      申请人：{item.name}
+                      申请人：{item.applyUserName}
                     </p>
                     <p className="h-fit w-fit inline-block pr-14 text-gray-500 pt-1 overflow-hidden">
                       邮箱：{item.email}
                     </p>
                     <p className="h-fit w-fit inline-block text-gray-500 pt-1 overflow-hidden">
-                      联系电话：{item.tel}
+                      联系电话：{item.phone}
                     </p>
-                    <Link
-                      to={""}
-                      className="h-fit w-fit float-right text-lg text-red-700 transition-all
-                      hover:text-purple-600 duration-500"
-                    >
-                      进入审核 . . .
-                    </Link>
                   </div>
                   {/* line 分割线 */}
-                  <div className="h-4/5 w-0 border-l-2 border-gray-300"></div>
+                  <div className="h-28 w-0 border-l-2 border-blue-300"></div>
                   {/* right */}
                   <div className="h-full w-1/6 bg-amber-10 pl-5 py-2">
                     <p className="text-lg text-gray-700">状态：</p>
                     <div className="text-xl w-fit h-fit text-green-600 mx-auto">
-                      {item.nowState}
+                      {item.status}
                     </div>
                   </div>
                 </div>

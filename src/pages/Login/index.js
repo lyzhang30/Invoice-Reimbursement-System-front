@@ -56,7 +56,7 @@ export default function Login(props) {
     // 登陆成功
     if (ans.data.code === 200) {
       ToastController({
-        mes: `欢迎回来，${ans.data.data.userDto.userName} ！`,
+        mes: `欢迎回来，${ans.data.data.userDto.name} ！`,
         timeout: 1000,
       });
       // const ans = JSON.parse(res.data.data);

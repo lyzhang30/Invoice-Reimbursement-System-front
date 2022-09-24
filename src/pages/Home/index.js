@@ -1,9 +1,49 @@
 import React from "react";
+import { useState, useEffect, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { usePersonalInformation } from "../PersonalPage";
+import { ToastContext } from "../../App";
+import { GET_ALL_PROJECT } from "../../utils/mapPath";
 import BackgroundCard from "../../Component/BackgroundCard";
-import ItemCard from "../../Component/ItemCard";
 
 // TODO:获取所有项目的列表
 export default function Home() {
+  const navigate = useNavigate();
+  const toastController = useContext(ToastContext);
+  const [list, setList] = useState([]);
+  usePersonalInformation();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      let token = localStorage.getItem("token");
+      const options = {
+        url: GET_ALL_PROJECT,
+        method: "GET",
+        headers: {
+          "content-type": "application/x-www-form-urlencoded",
+          Authorization: token,
+        },
+        data: {
+          Authorization: token,
+        },
+      };
+      const res = await axios(options);
+
+      if (res.data.code === 200) {
+        setList(res.data.data);
+        console.log(res.data.data);
+      } else {
+        toastController({
+          mes: "请求失败!",
+          timeout: 1000,
+        });
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <>
       <BackgroundCard>
@@ -11,22 +51,44 @@ export default function Home() {
           className="h-auto w-full min-h-0  shrink-0 grid grid-flow-row grid-cols-3
          gap-8 auto-cols-fr place-items-center"
         >
-          <ItemCard></ItemCard>
-          <ItemCard></ItemCard>
-          <ItemCard></ItemCard>
-          <ItemCard></ItemCard>
-          <ItemCard></ItemCard>
-          <ItemCard></ItemCard>
-          <ItemCard></ItemCard>
-          <ItemCard></ItemCard>
-          <ItemCard></ItemCard>
-          <ItemCard></ItemCard>
-          <ItemCard></ItemCard>
-          <ItemCard></ItemCard>
-          <ItemCard></ItemCard>
-          <ItemCard></ItemCard>
-          <ItemCard></ItemCard>
-          <ItemCard></ItemCard>
+          {list.map((item) => {
+            return (
+              <div
+                className="h-64 w-full  flex-col justify-between items-start p-5
+             bg-blue-50 rounded transition-all duration-200 hover:bg-blue-100"
+                onClick={() => {
+                  navigate(`/Project/${item.id}`);
+                }}
+              >
+                <div
+                  className="h-12 max-w-full shrink-0 grow-0 block text-blue-600 text-3xl select-none
+               font-bold truncate px-1 transition-all duration-200 transform hover:text-gray-700"
+                >
+                  {item.categoryName}
+                </div>
+                <p className="block h-10 px-3 font-bold text-lg text-gray-700">
+                  申请详情：
+                </p>
+                <div
+                  className="h-20 py-1 px-2 w-full flex-grow select-none block 
+                bg-white overflow-hidden break-all text-gray-500"
+                >
+                  {item.remark}
+                </div>
+
+                <div className="h-8 mt-2 text-gray-600 select-none ">
+                  <p className="px-3">
+                    <span className="font-bold">开始时间：</span>
+                    {item.startTime}
+                  </p>
+                  <p className="px-3">
+                    <span className="font-bold">结束时间：</span>
+                    {item.endTime}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </BackgroundCard>
     </>

@@ -59,7 +59,10 @@ export function usePersonalInformation() {
         url: GET_INFO_BY_TOKEN,
         method: "GET",
         headers: {
-          "content-type": "application/x-www-form-urlencoded",
+          "Content-Type": "application/x-www-form-urlencoded",
+          Authorization: token,
+        },
+        data: {
           Authorization: token,
         },
       };
@@ -142,7 +145,7 @@ export default function PersonalPage() {
       url: UPDATE_USER,
       method: "POST",
       headers: {
-        "content-type": "application/x-www-form-urlencoded",
+        "content-type": "application/json",
         Authorization: token,
       },
       params: {
