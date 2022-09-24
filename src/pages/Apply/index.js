@@ -4,6 +4,8 @@ import {
   GET_APPLY_BY_ID,
   POST_SUBMIT_AN_APPLY,
   POST_WITHDRAW_A_APPLY,
+  POST_UPLOAD_FILE,
+  GET_DOWNLOAD_IMG,
 } from "../../utils/mapPath";
 import axios from "axios";
 import { usePersonalInformation } from "../PersonalPage";
@@ -53,6 +55,7 @@ export default function Apply() {
   const [showAddWin, setShowAddWin] = useState(false);
   usePersonalInformation();
   const [invoiceimg, setInvoiceimg] = useState(undefined);
+  const [invoiceimgUrl, setInvoiceimgUrl] = useState("");
   const [voucherimg, setVoucherimg] = useState(undefined);
   const [invoiceType, setInvoiceType] = useState("");
   const [taitou, setTaitou] = useState("");
@@ -82,7 +85,7 @@ export default function Apply() {
         setInfo(res.data.data);
       } else {
         toastController({
-          mes: "请求失败!",
+          mes: res.data.message,
           timeout: 1000,
         });
       }
@@ -120,7 +123,7 @@ export default function Apply() {
         });
       } else {
         toastController({
-          mes: "请求失败!",
+          mes: res.data.message,
           timeout: 1000,
         });
       }
@@ -177,6 +180,45 @@ export default function Apply() {
     setShowAddWin(false);
   }
 
+  function upChangeInvoiceimg(e) {
+    e.preventDefault();
+    let file = document.querySelector("#invoiceimg");
+    let formData = new FormData();
+    let temp = file.files[0];
+    formData.append("file", temp);
+    // console.log(temp);
+
+    const fetchData = async () => {
+      let token = localStorage.getItem("token");
+      const options = {
+        url: POST_UPLOAD_FILE,
+        method: "POST",
+        headers: {
+          "content-type": "multipart/form-data",
+          Authorization: token,
+        },
+        data: formData,
+      };
+      const res = await axios(options);
+      if (res.data.code === 200) {
+        // console.log(res.data.data);
+        setInvoiceimg(res.data.data);
+        toastController({
+          mes: "上传成功!",
+          timeout: 1000,
+        });
+      } else {
+        toastController({
+          mes: "上传失败!",
+          timeout: 1000,
+        });
+      }
+      return res.data.data;
+    };
+
+    return fetchData();
+  }
+
   return (
     <>
       <div
@@ -197,12 +239,20 @@ export default function Apply() {
                 <CloseSvg size={52}></CloseSvg>
               </div>
               <div className="h-5 w-52"></div>
+              {/* <img
+                className="h-10 w-10"
+                alt="img"
+                id="pre"
+                src={`http://112.74.125.184:9527/common/download?name=${invoiceimg}`}
+              ></img> */}
               <p>
                 发票图片：
                 <input
+                  id="invoiceimg"
                   type="file"
                   accept="image/png, image/jpeg, image/jpg, image/svg, image/gif"
                   className="h-8 w-96 bg-sky-50"
+                  onChange={upChangeInvoiceimg}
                 />
               </p>
               <br />
@@ -323,7 +373,7 @@ export default function Apply() {
                 <BasicInfo>
                   <p>
                     <Label>报销项目：</Label>
-                    <Content>{info.id}</Content>
+                    <Content>{info.reimbursementTemplateName}</Content>
                   </p>
                   <p>
                     <Label>申报人姓名：</Label>

@@ -53,9 +53,10 @@ export default function MyItems() {
         setList(res.data.data);
       } else {
         toastController({
-          mes: "请求失败!",
+          mes: res.data.message,
           timeout: 1000,
         });
+        navigate(-1);
       }
     };
 
@@ -84,14 +85,15 @@ export default function MyItems() {
                   {/* left */}
                   <div className="h-full w-10/12 bg-red-10 pr-3">
                     <p className="text-sky-700 text-xl font-bold truncate">
-                      {item.applyUserName}
+                      {item.reimbursementTemplateName}
                     </p>
-                    <div className="h-14 w-full text-gray-500 py-1 overflow-hidden">
-                      {item.applyRemark}
+                    <div className="h-14 w-full text-gray-500 py-1 overflow-hidden ">
+                      {item.reimbursementTemplateRemark}
                     </div>
                   </div>
                   {/* line 分割线 */}
                   <div className="h-28 w-0 border-l-2 border-blue-300"></div>
+
                   {/* right */}
                   <div className="h-full w-1/6 bg-amber-10 pl-5 py-3">
                     <p className="text-lg text-gray-700">状态：</p>

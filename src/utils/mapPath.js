@@ -20,16 +20,16 @@ export const POST_WITHDRAW_A_APPLY = "/invoice/withdraw";
 export const GET_ALL_TO_BE_REVIEW = "/invoice/get-for-unit";
 //管理员删除一个报销项目
 export const POST_REMOVE_A_PROJECT = "/reimbursement-template/remove-template";
+//上传文件
+export const POST_UPLOAD_FILE = "/common/upload";
 //
-// export const  = "";
+export const GET_UNIT_TYPE = "/dd-unit/get-unit";
 //
-// export const  = "";
-//
-// export const  = "";
-//
-// export const  = "";
-//
-// export const  = "";
+export const GET_ROLE_TYPE = "/dd-role/get-role";
+//新增用户
+export const POST_ADD_A_USER = "/user/insert-user";
+//下载图片
+export const GET_DOWNLOAD_IMG = "/common/download";
 //
 // export const  = "";
 //
