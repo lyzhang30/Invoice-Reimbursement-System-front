@@ -3,16 +3,11 @@ import { useContext, useState, useEffect } from "react";
 
 export default function ModifyUser() {
   const [userInfo, setUserInfo] = useState({});
-  const [unitTypeList, setUnitTypeList] = useState([
-    { name: "工学院", id: 1 },
-    { name: "理学院", id: 2 },
-  ]);
+  const [unitTypeList, setUnitTypeList] = useState([]);
   const [unit, setUnit] = useState("");
-  const [roleIdList, setRoleIdList] = useState([
-    { name: "学生", id: 1 },
-    { name: "管理员", id: 2 },
-  ]);
+  const [roleIdList, setRoleIdList] = useState([]);
   const [roleId, setRoleId] = useState(0);
+
   return (
     <div className="h-115 w-full p-5 bg-sky-50 relative">
       <p>

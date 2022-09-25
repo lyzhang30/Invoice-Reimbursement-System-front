@@ -15,12 +15,6 @@ export default function AddUser() {
   const [roleIdList, setRoleIdList] = useState([]);
   const [roleId, setRoleId] = useState(undefined);
 
-  // const [userName, setUserName] = useState("");
-  // const [name, setName] = useState("");
-  // const [phone, setPhone] = useState("");
-  // const [address, setAddress] = useState("");
-  // const [password, setPassword] = useState("");
-
   const userNameInput = useRef(null);
   const nameInput = useRef(null);
   const phoneInput = useRef(null);
@@ -80,7 +74,7 @@ export default function AddUser() {
   }, []);
 
   function handleAdd() {
-    const post = async () => {
+    const postNewUser = async () => {
       let token = localStorage.getItem("token");
       const options = {
         url: POST_ADD_A_USER,
@@ -107,7 +101,7 @@ export default function AddUser() {
         timeout: 1000,
       });
     };
-    post();
+    postNewUser();
   }
 
   return (

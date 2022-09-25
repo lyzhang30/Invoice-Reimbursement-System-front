@@ -11,7 +11,7 @@ export const GET_APPLY_BY_ID = "/invoice/get-by-id";
 //得到我所有的申请
 export const GET_ALL_OF_MY_ITEMS = "/invoice/get-for-apply";
 //
-export const POST_SUBMIT_AN_APPLY = "/invoice/submit";
+export const POST_SUBMIT_AN_APPLY = "/invoice/submit-invoice";
 //点击申请
 export const POST_ADD_AN_APPLY = "/invoice/apply";
 //撤销一条申请
@@ -29,17 +29,15 @@ export const GET_ROLE_TYPE = "/dd-role/get-role";
 //新增用户
 export const POST_ADD_A_USER = "/user/insert-user";
 //下载图片
-export const GET_DOWNLOAD_IMG = "/common/download";
-//
-// export const  = "";
-//
-// export const  = "";
-//
-// export const  = "";
-//
-// export const  = "";
-//
-// export const  = "";
+export const GET_DOWNLOAD_IM = "/common/download";
+//获取发票的所有种类（用于选择）
+export const GET_ALL_INVOICE_TYPE = "/dd-invoice-category/get-category";
+//增加一条发票明细
+export const POST_ADD_INVOICE_DETAILS = "/invoice/add-details";
+//删除一条发票明细
+export const POST_DELETE_INVOICE_DETAILS = "/invoice/delete-details";
+//管理员添加一个报销项目
+export const POST_ADD_A_PROJECT = "/reimbursement-template/insert-template";
 //
 // export const  = "";
 //

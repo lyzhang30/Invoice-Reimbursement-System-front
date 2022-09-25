@@ -1,11 +1,13 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import { ToastContext } from "../../App";
 import {
   GET_APPLY_BY_ID,
   POST_SUBMIT_AN_APPLY,
   POST_WITHDRAW_A_APPLY,
   POST_UPLOAD_FILE,
-  GET_DOWNLOAD_IMG,
+  GET_ALL_INVOICE_TYPE,
+  POST_ADD_INVOICE_DETAILS,
+  POST_DELETE_INVOICE_DETAILS,
 } from "../../utils/mapPath";
 import axios from "axios";
 import { usePersonalInformation } from "../PersonalPage";
@@ -13,8 +15,6 @@ import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import TopNav from "../../Component/TopNav";
 import { BackSvg, AddSvg, CancelSvg, SubmitSvg, CloseSvg } from "../../svg";
-import fapiao from "../../img/fapiao.jpg";
-import pingzheng from "../../img/pingzheng.jpg";
 
 const BasicInfo = styled.div`
   height: fit-content;
@@ -48,23 +48,50 @@ const Label = styled.span`
 // props : 模板 id
 export default function Apply() {
   const navigate = useNavigate();
+  usePersonalInformation();
   const { id } = useParams();
   const toastController = useContext(ToastContext);
+  const [update, setUpdate] = useState(true);
   const [info, setInfo] = useState(undefined);
-  const [file, setFile] = useState(undefined);
+  const [filePath, setFilePath] = useState("");
   const [showAddWin, setShowAddWin] = useState(false);
-  usePersonalInformation();
+
   const [invoiceimg, setInvoiceimg] = useState(undefined);
-  const [invoiceimgUrl, setInvoiceimgUrl] = useState("");
   const [voucherimg, setVoucherimg] = useState(undefined);
-  const [invoiceType, setInvoiceType] = useState("");
-  const [taitou, setTaitou] = useState("");
-  const [number, setNumber] = useState(1);
-  const [initPrice, setInitPrice] = useState(0);
-  const [totalPrice, setTotalPrice] = useState(0);
+
+  const [typeList, setTypeList] = useState([]);
+  const [invoiceType, setInvoiceType] = useState(0);
+  const taitouInput = useRef(null);
+  const numberInput = useRef(null);
+  const initPriceInput = useRef(null);
+  const totalPriceInput = useRef(null);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const getInvoiceType = async () => {
+      let token = localStorage.getItem("token");
+      const options = {
+        url: GET_ALL_INVOICE_TYPE,
+        method: "GET",
+        headers: {
+          "content-type": "application/json",
+          Authorization: token,
+        },
+      };
+      const res = await axios(options);
+      if (res.data.code === 200) {
+        setTypeList(res.data.data);
+      } else {
+        toastController({
+          mes: res.data.message,
+          timeout: 1000,
+        });
+      }
+    };
+    getInvoiceType();
+  }, []);
+
+  useEffect(() => {
+    const getApplyInfo = async () => {
       let token = localStorage.getItem("token");
       const options = {
         url: GET_APPLY_BY_ID,
@@ -91,8 +118,8 @@ export default function Apply() {
       }
     };
 
-    fetchData();
-  }, [id, toastController]);
+    getApplyInfo();
+  }, [id, showAddWin, update]);
 
   function handleBack() {
     navigate(-1);
@@ -109,10 +136,14 @@ export default function Apply() {
           Authorization: token,
         },
         data: {
-          Authorization: token,
+          id: id,
+          applyRemark: "",
+          fileAddress: filePath,
         },
         params: {
           id: id,
+          applyRemark: "",
+          fileAddress: filePath,
         },
       };
       const res = await axios(options);
@@ -129,8 +160,12 @@ export default function Apply() {
       }
     };
     fun();
+    setTimeout(() => {
+      navigate("/MyItems");
+    }, 2000);
   }
 
+  //撤回一个申请
   function handleCancel() {
     const cancel = async () => {
       let token = localStorage.getItem("token");
@@ -172,21 +207,12 @@ export default function Apply() {
     setShowAddWin(true);
   }
 
-  function handleExit() {
-    setShowAddWin(false);
-  }
-
-  function handleDetermineInvoice() {
-    setShowAddWin(false);
-  }
-
-  function upChangeInvoiceimg(e) {
+  const uploadFile = (e) => {
     e.preventDefault();
-    let file = document.querySelector("#invoiceimg");
+    let file = document.querySelector("#filePath");
     let formData = new FormData();
     let temp = file.files[0];
     formData.append("file", temp);
-    // console.log(temp);
 
     const fetchData = async () => {
       let token = localStorage.getItem("token");
@@ -201,22 +227,182 @@ export default function Apply() {
       };
       const res = await axios(options);
       if (res.data.code === 200) {
-        // console.log(res.data.data);
-        setInvoiceimg(res.data.data);
+        setFilePath(res.data.data);
         toastController({
-          mes: "上传成功!",
+          mes: "上传成功！",
           timeout: 1000,
         });
       } else {
         toastController({
-          mes: "上传失败!",
+          mes: res.data.message,
+          timeout: 3000,
+        });
+      }
+    };
+
+    fetchData();
+  };
+
+  //确定增加一条发票明细
+  function handleDetermineInvoice(e) {
+    e.preventDefault();
+
+    const postToAdd = async () => {
+      let token = localStorage.getItem("token");
+      console.log("zlzl:");
+      console.log(invoiceimg);
+      console.log(voucherimg);
+      const options = {
+        url: POST_ADD_INVOICE_DETAILS,
+        method: "POST",
+        headers: {
+          "Content-type": "application/x-www-form-urlencoded",
+          Authorization: token,
+        },
+        params: {
+          invoiceId: id,
+          invoiceCategoryId: invoiceType,
+          purchaserName: taitouInput.current.value,
+          amountInfighters: initPriceInput.current.value,
+          number: numberInput.current.value,
+          totalPrice: totalPriceInput.current.value,
+          invoicePath: invoiceimg,
+          credentialsPath: voucherimg,
+        },
+        data: {
+          invoiceId: id,
+          invoiceCategoryId: invoiceType,
+          purchaserName: taitouInput.current.value,
+          amountInfighters: initPriceInput.current.value,
+          number: numberInput.current.value,
+          totalPrice: totalPriceInput.current.value,
+          invoicePath: invoiceimg,
+          credentialsPath: voucherimg,
+        },
+      };
+      const res = await axios(options);
+
+      if (res.data.code === 200) {
+        toastController({
+          mes: "添加成功!",
+          timeout: 1000,
+        });
+      } else {
+        toastController({
+          mes: "添加失败",
           timeout: 1000,
         });
       }
-      return res.data.data;
+    };
+    postToAdd();
+    setShowAddWin(false);
+  }
+
+  //删除一条发票明细
+  function handelDeleteInvoice(id) {
+    const postDeleteInvoice = async () => {
+      let token = localStorage.getItem("token");
+      const options = {
+        url: POST_DELETE_INVOICE_DETAILS,
+        method: "POST",
+        headers: {
+          "content-type": "application/x-www-form-urlencoded",
+          Authorization: token,
+        },
+        data: {
+          id: id,
+        },
+        params: {
+          id: id,
+        },
+      };
+      const res = await axios(options);
+      if (res.data.code === 200) {
+        toastController({
+          mes: "删除成功",
+          timeout: 1000,
+        });
+      } else {
+        toastController({
+          mes: res.data.message,
+          timeout: 1000,
+        });
+      }
+    };
+    postDeleteInvoice();
+    setUpdate(!update);
+  }
+
+  function upChangeInvoiceimg(e) {
+    e.preventDefault();
+    let file = document.querySelector("#invoiceimg");
+    let formData = new FormData();
+    let temp = file.files[0];
+    formData.append("file", temp);
+
+    const fetchData = async () => {
+      let token = localStorage.getItem("token");
+      const options = {
+        url: POST_UPLOAD_FILE,
+        method: "POST",
+        headers: {
+          "content-type": "multipart/form-data",
+          Authorization: token,
+        },
+        data: formData,
+      };
+      const res = await axios(options);
+      if (res.data.code === 200) {
+        setInvoiceimg(res.data.data);
+        toastController({
+          mes: "上传成功！",
+          timeout: 1000,
+        });
+      } else {
+        toastController({
+          mes: res.data.message,
+          timeout: 3000,
+        });
+      }
     };
 
-    return fetchData();
+    fetchData();
+  }
+
+  function upChangeVoucherimg(e) {
+    e.preventDefault();
+    let file = document.querySelector("#voucherimg");
+    let formData = new FormData();
+    let temp = file.files[0];
+    formData.append("file", temp);
+
+    const fetchData = async () => {
+      let token = localStorage.getItem("token");
+      const options = {
+        url: POST_UPLOAD_FILE,
+        method: "POST",
+        headers: {
+          "content-type": "multipart/form-data",
+          Authorization: token,
+        },
+        data: formData,
+      };
+      const res = await axios(options);
+      if (res.data.code === 200) {
+        setVoucherimg(res.data.data);
+        toastController({
+          mes: "上传成功",
+          timeout: 1000,
+        });
+      } else {
+        toastController({
+          mes: res.data.message,
+          timeout: 3000,
+        });
+      }
+    };
+
+    fetchData();
   }
 
   return (
@@ -234,17 +420,14 @@ export default function Apply() {
             <div className=" h-100 w-120 bg-gray-50 rounded-xl pl-6 ">
               <div
                 className="h-fit w-fit float-right bg-purple-20"
-                onClick={handleExit}
+                onClick={() => {
+                  setShowAddWin(false);
+                }}
               >
                 <CloseSvg size={52}></CloseSvg>
               </div>
               <div className="h-5 w-52"></div>
-              {/* <img
-                className="h-10 w-10"
-                alt="img"
-                id="pre"
-                src={`http://112.74.125.184:9527/common/download?name=${invoiceimg}`}
-              ></img> */}
+
               <p>
                 发票图片：
                 <input
@@ -259,9 +442,11 @@ export default function Apply() {
               <p>
                 凭证图片：
                 <input
+                  id="voucherimg"
                   type="file"
                   accept="image/png, image/jpeg, image/jpg, image/svg, image/gif"
                   className="h-8 w-96 bg-sky-50"
+                  onChange={upChangeVoucherimg}
                 />
               </p>
               <br />
@@ -271,33 +456,52 @@ export default function Apply() {
                   name="type"
                   id="type-select"
                   className="bg-sky-50 h-8 w-44"
+                  onChange={(e) => {
+                    setInvoiceType(e.target.value);
+                  }}
                 >
-                  <option value="增值税专用发票">增值税专用发票</option>
-                  <option value="普通发票">普通发票</option>
-                  <option value="专业发票">专业发票</option>
-                  <option value="其他发票">其他发票</option>
+                  <option value={0}></option>
+                  {typeList.map((item) => {
+                    return <option value={item.id}>{item.categoryName}</option>;
+                  })}
                 </select>
               </p>
               <br />
               <p>
                 抬头：
-                <input type="text" className="h-8 w-80 bg-sky-50 px-3" />
+                <input
+                  ref={taitouInput}
+                  type="text"
+                  className="h-8 w-80 bg-sky-50 px-3"
+                />
               </p>
               <br />
               <p>
                 单价：
-                <input type="number" className="h-8 w-80 bg-sky-50 px-3" />
+                <input
+                  ref={initPriceInput}
+                  type="number"
+                  className="h-8 w-80 bg-sky-50 px-3"
+                />
                 （元）
               </p>
               <br />
               <p>
                 个数：
-                <input type="number" className="h-8 w-80 bg-sky-50 px-3" />
+                <input
+                  ref={numberInput}
+                  type="number"
+                  className="h-8 w-80 bg-sky-50 px-3"
+                />
               </p>
               <br />
               <p>
                 总额：
-                <input type="number" className="h-8 w-80 bg-sky-50 px-3" />
+                <input
+                  ref={totalPriceInput}
+                  type="number"
+                  className="h-8 w-80 bg-sky-50 px-3"
+                />
                 （元）
               </p>
 
@@ -352,14 +556,17 @@ export default function Apply() {
                     <p className="text-gray-700 text-lg">撤销</p>
                   </div>
                   {/* 提交按钮 */}
-                  <div
-                    className="w-20 h-full bg-green-100 flex justify-between items-center 
-              px-2 mb-2 rounded select-none float-right mr-5 transition-all duration-300 hover:bg-green-200"
-                    onClick={handleSubmit}
-                  >
-                    <SubmitSvg size={24}></SubmitSvg>
-                    <p className="text-gray-700 text-lg">提交</p>
-                  </div>
+                  {info.status === "未提交" && (
+                    <div
+                      className="w-20 h-full bg-green-100 flex justify-between items-center px-2 
+                      mb-2 rounded select-none float-right mr-5 transition-all duration-300 hover:bg-green-200"
+                      onClick={handleSubmit}
+                    >
+                      <SubmitSvg size={24}></SubmitSvg>
+                      <p className="text-gray-700 text-lg">提交</p>
+                    </div>
+                  )}
+
                   {/* zhuangtai */}
                   <div
                     className="w-32 h-full flex justify-center items-center text-green-700 
@@ -409,19 +616,17 @@ export default function Apply() {
                   <Label>附件上传：</Label>
                   <div className="h-8 w-96 mt-2 bg-gray-50">
                     <input
+                      id="filePath"
                       className="w-full"
                       type="file"
-                      value={file}
-                      onChange={(e) => {
-                        setFile(e.target.value);
-                      }}
+                      onChange={uploadFile}
                     ></input>
                   </div>
                 </div>
                 {/* 表示发票的组件list */}
-                {info.invoices !== undefined &&
-                  info.invoices.length > 0 &&
-                  info.invoices.map((item) => {
+                {info.invoiceDetailsList !== undefined &&
+                  info.invoiceDetailsList.length > 0 &&
+                  info.invoiceDetailsList.map((item) => {
                     return (
                       <div className="w-full h-112 bg-blue-50 flex flex-col justify-between items-center mb-3">
                         {/* 发票两张图 */}
@@ -429,7 +634,7 @@ export default function Apply() {
                           {/* 左边发票 */}
                           <div className="h-full flex-grow w-96 bg-gray-50 border border-gray-400">
                             <img
-                              src={`${fapiao}`}
+                              src={`http://112.74.125.184:9527/common/download?name=${item.invoicePath}`}
                               alt="发票"
                               className="max-h-full max-w-full block m-auto"
                             />
@@ -437,7 +642,7 @@ export default function Apply() {
                           {/* 右边凭证 */}
                           <div className="h-full flex-grow w-96 bg-gray-50 border border-gray-400">
                             <img
-                              src={`${pingzheng}`}
+                              src={`http://112.74.125.184:9527/common/download?name=${item.credentialsPath}`}
                               alt="凭证"
                               className="max-h-full max-w-full block m-auto"
                             />
@@ -447,25 +652,28 @@ export default function Apply() {
                         <div className=" flex-grow w-full py-1 px-5 ">
                           <div className="h-8 w-full flex justify-between items-center">
                             <div className="h-full w-fit ">
-                              抬头：{item.taitou}
+                              抬头：{item.purchaserName}
                             </div>
                             <div className="h-full w-fit">
-                              发票类型：{item.type}
+                              发票类型：{item.invoiceCategoryName}
                             </div>
                           </div>
                           <div className="h-8 w-full flex justify-between items-center">
                             <div className="h-full w-fit">
-                              单价：{item.unitPrice}（元）
+                              单价：{item.amountInfighters}（元）
                             </div>
                             <div className="h-full w-fit ">
-                              数量：{item.num}
+                              数量：{item.number}
                             </div>
                             <div className="h-full w-fit ">
-                              总金额：{item.total}（元）
+                              总金额：{item.totalPrice}（元）
                             </div>
                             <div
                               className="h-full w-14 flex justify-center items-center bg-red-200 rounded
                           transition-all duration-500 hover:bg-red-300 select-none"
+                              onClick={() => {
+                                handelDeleteInvoice(item.id);
+                              }}
                             >
                               删除
                             </div>

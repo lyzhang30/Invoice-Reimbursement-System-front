@@ -1,6 +1,11 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import { ToastContext } from "../../App";
-import { POST_REMOVE_A_PROJECT, GET_ALL_PROJECT } from "../../utils/mapPath";
+import {
+  POST_REMOVE_A_PROJECT,
+  GET_ALL_PROJECT,
+  POST_ADD_A_PROJECT,
+  POST_UPLOAD_FILE,
+} from "../../utils/mapPath";
 import axios from "axios";
 import { usePersonalInformation } from "../PersonalPage";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
@@ -14,81 +19,14 @@ export default function ProjectManagement() {
   const toastController = useContext(ToastContext);
   const [list, setList] = useState([]);
   const [showAddWin, setShowAddWin] = useState(false);
-  const [showModifyWin, setShowModifyWin] = useState(false);
-  // const [list, setList] = useState([
-  //   {
-  //     id: 1,
-  //     projectName: "大创",
-  //     detail:
-  //       "申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情.",
-  //     startTime: "2022-09-01",
-  //     endTime: "2022-09-10",
-  //   },
-  //   {
-  //     id: 2,
-  //     projectName: "数学建模",
-  //     detail:
-  //       "申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情.",
-  //     startTime: "2022-09-01",
-  //     endTime: "2022-09-10",
-  //   },
-  //   {
-  //     id: 2,
-  //     projectName: "数学建模",
-  //     detail:
-  //       "申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情.",
-  //     startTime: "2022-09-01",
-  //     endTime: "2022-09-10",
-  //   },
-  //   {
-  //     id: 2,
-  //     projectName: "数学建模",
-  //     detail:
-  //       "申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情.",
-  //     startTime: "2022-09-01",
-  //     endTime: "2022-09-10",
-  //   },
-  //   {
-  //     id: 2,
-  //     projectName: "数学建模",
-  //     detail:
-  //       "申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情.",
-  //     startTime: "2022-09-01",
-  //     endTime: "2022-09-10",
-  //   },
-  //   {
-  //     id: 2,
-  //     projectName: "数学建模",
-  //     detail:
-  //       "申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情.",
-  //     startTime: "2022-09-01",
-  //     endTime: "2022-09-10",
-  //   },
-  //   {
-  //     id: 2,
-  //     projectName: "数学建模",
-  //     detail:
-  //       "申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情.",
-  //     startTime: "2022-09-01",
-  //     endTime: "2022-09-10",
-  //   },
-  //   {
-  //     id: 2,
-  //     projectName: "数学建模",
-  //     detail:
-  //       "申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情.",
-  //     startTime: "2022-09-01",
-  //     endTime: "2022-09-10",
-  //   },
-  //   {
-  //     id: 2,
-  //     projectName: "数学建模",
-  //     detail:
-  //       "申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情.",
-  //     startTime: "2022-09-01",
-  //     endTime: "2022-09-10",
-  //   },
-  // ]);
+  const [filePath, setFilePath] = useState("");
+
+  const categoryNameInput = useRef(null);
+  const applyCategoryInput = useRef(null);
+  const stInput = useRef(null);
+  const etInput = useRef(null);
+  // const pathInput = useRef(null);
+  const remarkInput = useRef(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -118,7 +56,7 @@ export default function ProjectManagement() {
     };
 
     fetchData();
-  }, [toastController]);
+  }, [toastController, showAddWin]);
 
   function handleAdd() {
     setShowAddWin(true);
@@ -167,7 +105,80 @@ export default function ProjectManagement() {
   };
 
   const handleDetermineAdd = () => {
+    const postAddNewProject = async () => {
+      let token = localStorage.getItem("token");
+      const options = {
+        url: POST_ADD_A_PROJECT,
+        method: "POST",
+        headers: {
+          "content-type": "application/x-www-form-urlencoded",
+          Authorization: token,
+        },
+        data: {
+          categoryName: categoryNameInput.current.value,
+          applyCategory: `${
+            applyCategoryInput.current.value === "是" ? "0" : "1"
+          }`,
+          st: stInput.current.value,
+          et: etInput.current.value,
+          remark: remarkInput.current.value,
+          path: filePath,
+        },
+        params: {
+          categoryName: categoryNameInput.current.value,
+          applyCategory: `${
+            applyCategoryInput.current.value === "是" ? "0" : "1"
+          }`,
+          st: stInput.current.value,
+          et: etInput.current.value,
+          remark: remarkInput.current.value,
+          path: filePath,
+        },
+      };
+      const res = await axios(options);
+      toastController({
+        mes: res.data.message,
+        timeout: 1000,
+      });
+    };
+    postAddNewProject();
     setShowAddWin(false);
+  };
+
+  const uploadFile = (e) => {
+    e.preventDefault();
+    let file = document.querySelector("#filePath");
+    let formData = new FormData();
+    let temp = file.files[0];
+    formData.append("file", temp);
+
+    const fetchData = async () => {
+      let token = localStorage.getItem("token");
+      const options = {
+        url: POST_UPLOAD_FILE,
+        method: "POST",
+        headers: {
+          "content-type": "multipart/form-data",
+          Authorization: token,
+        },
+        data: formData,
+      };
+      const res = await axios(options);
+      if (res.data.code === 200) {
+        setFilePath(res.data.data);
+        toastController({
+          mes: "上传成功！",
+          timeout: 1000,
+        });
+      } else {
+        toastController({
+          mes: res.data.message,
+          timeout: 3000,
+        });
+      }
+    };
+
+    fetchData();
   };
 
   return (
@@ -193,34 +204,59 @@ export default function ProjectManagement() {
                 <div className="h-8 w-52"></div>
                 <p>
                   报销项目名称：
-                  <input type="text" className="h-9 w-130 bg-sky-50 px-3" />
+                  <input
+                    ref={categoryNameInput}
+                    type="text"
+                    className="h-9 w-130 bg-sky-50 px-3"
+                  />
                 </p>
                 <br />
                 <p>
                   是否经学院审批：
-                  <input type="text" className="h-9 w-20 bg-sky-50 px-3" />（
-                  请填 “是” 或 “否” ）
+                  <input
+                    ref={applyCategoryInput}
+                    type="text"
+                    className="h-9 w-20 bg-sky-50 px-3"
+                  />
+                  （ 请填 “是” 或 “否” ）
                 </p>
                 <br />
                 <p>
                   开始时间：
-                  <input type="date" className="h-9 w-130 bg-sky-50 px-3" />
+                  <input
+                    ref={stInput}
+                    type="datetime-local"
+                    className="h-9 w-130 bg-sky-50 px-3"
+                  />
                 </p>
                 <br />
                 <p>
                   结束时间：
-                  <input type="date" className="h-9 w-130 bg-sky-50 px-3" />
+                  <input
+                    ref={etInput}
+                    type="datetime-local"
+                    className="h-9 w-130 bg-sky-50 px-3"
+                  />
                 </p>
                 <br />
                 <p>
                   附加文件：
-                  <input type="file" className="h-8 w-130 bg-sky-50" />
+                  <input
+                    id="filePath"
+                    type="file"
+                    className="h-8 w-96 bg-sky-50"
+                    onChange={uploadFile}
+                  />
+                  <span className="text-red-600">
+                    （ 文件大小不可超过 10 兆 ）
+                  </span>
                 </p>
                 <br />
                 <p>申请详情：</p>
                 <textarea
                   cols="105"
                   rows="15"
+                  ref={remarkInput}
                   className="p-3 h-72 w-11/12 bg-sky-50 mt-2"
                 ></textarea>
                 <p className="text-red-700 w-fit m-0">注意：所有均为必填项</p>
