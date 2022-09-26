@@ -32,9 +32,6 @@ export default function Login(props) {
   //   fetch();
   // }, [navigate, ToastController]);
 
-  //20lyzhang1
-  //123456
-
   // 用户点击登录
   const login = async () => {
     if (usrInput.current.value === "" && passwordInput.current.value === "") {

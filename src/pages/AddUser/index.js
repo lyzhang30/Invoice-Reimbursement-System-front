@@ -96,10 +96,17 @@ export default function AddUser() {
         },
       };
       const res = await axios(options);
-      toastController({
-        mes: res.data.message,
-        timeout: 1000,
-      });
+      if (res.data.code === 200) {
+        toastController({
+          mes: "新增用户成功！",
+          timeout: 2000,
+        });
+      } else {
+        toastController({
+          mes: res.data.message,
+          timeout: 3000,
+        });
+      }
     };
     postNewUser();
   }

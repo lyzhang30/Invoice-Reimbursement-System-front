@@ -62,8 +62,8 @@ export default function Project() {
         console.log(res.data.data);
       } else {
         toastController({
-          mes: "请求失败!",
-          timeout: 1000,
+          mes: res.data.message,
+          timeout: 3000,
         });
       }
     };
@@ -95,8 +95,8 @@ export default function Project() {
       });
     } else {
       toastController({
-        mes: "申请失败!",
-        timeout: 1000,
+        mes: res.data.message,
+        timeout: 3000,
       });
     }
     navigate(`/Apply/${res.data.data.id}`);
@@ -120,7 +120,7 @@ export default function Project() {
             </div>
           </MyHeader>
           <Label>
-            是否要经学院同意：{info.applyCategory === 0 ? "是" : "否"}
+            是否要经学院同意：{info.applyCategory === "0" ? "是" : "否"}
           </Label>
           <Label>附件：</Label>
           <a

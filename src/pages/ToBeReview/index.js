@@ -61,7 +61,7 @@ export default function ToBeReview() {
       } else {
         toastController({
           mes: res.data.message,
-          timeout: 1000,
+          timeout: 3000,
         });
       }
     };

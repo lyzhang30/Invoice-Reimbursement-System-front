@@ -191,7 +191,7 @@ export default function Apply() {
         });
       } else {
         toastController({
-          mes: "撤销失败!",
+          mes: res.data.message,
           timeout: 1000,
         });
       }
@@ -289,7 +289,7 @@ export default function Apply() {
         });
       } else {
         toastController({
-          mes: "添加失败",
+          mes: res.data.message,
           timeout: 1000,
         });
       }
@@ -611,18 +611,22 @@ export default function Apply() {
                     <Content>{info.userDto.bankAmountId}</Content>
                   </p>
                 </BasicInfo>
+
                 {/* 附件上传 */}
-                <div className="w-full h-24 px-6  ">
-                  <Label>附件上传：</Label>
-                  <div className="h-8 w-96 mt-2 bg-gray-50">
-                    <input
-                      id="filePath"
-                      className="w-full"
-                      type="file"
-                      onChange={uploadFile}
-                    ></input>
+                {info.status === "未提交" && (
+                  <div className="w-full h-24 px-6  ">
+                    <Label>附件上传：</Label>
+                    <div className="h-8 w-96 mt-2 bg-gray-50">
+                      <input
+                        id="filePath"
+                        className="w-full"
+                        type="file"
+                        onChange={uploadFile}
+                      ></input>
+                    </div>
                   </div>
-                </div>
+                )}
+
                 {/* 表示发票的组件list */}
                 {info.invoiceDetailsList !== undefined &&
                   info.invoiceDetailsList.length > 0 &&
@@ -685,15 +689,18 @@ export default function Apply() {
                       </div>
                     );
                   })}
+
                 {/* 添加发票按钮 */}
-                <div
-                  className="h-9 w-40 px-3 select-none mb-8 flex items-center justify-around rounded-sm
+                {info.status === "未提交" && (
+                  <div
+                    className="h-9 w-40 px-3 select-none mb-8 flex items-center justify-around rounded-sm
                bg-blue-100 transition-all duration-500 hover:border-2 hover:border-blue-300 hover:bg-blue-200"
-                  onClick={handleAddInvoice}
-                >
-                  <AddSvg size={24}></AddSvg>
-                  <p className=" text-gray-800">点击添加发票</p>
-                </div>
+                    onClick={handleAddInvoice}
+                  >
+                    <AddSvg size={24}></AddSvg>
+                    <p className=" text-gray-800">点击添加发票</p>
+                  </div>
+                )}
               </div>
             </div>
           )}

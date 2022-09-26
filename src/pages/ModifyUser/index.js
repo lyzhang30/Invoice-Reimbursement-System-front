@@ -5,6 +5,7 @@ import {
   GET_UNIT_TYPE,
   GET_ROLE_TYPE,
   POST_MODIFY_USER,
+  POST_DELETE_USER,
 } from "../../utils/mapPath";
 import axios from "axios";
 import { usePersonalInformation } from "../PersonalPage";
@@ -19,12 +20,6 @@ export default function ModifyUser() {
   const toastController = useContext(ToastContext);
 
   const userNameInput = useRef(null);
-  // const nameInput = useRef(null);
-  // const phoneInput = useRef(null);
-  // const addressInput = useRef(null);
-  // const passwordInput = useRef(null);
-  // const accountInput = useRef(null);
-  // const emailInput = useRef(null);
 
   const [name, setName] = useState(undefined);
   const [address, setAddress] = useState(undefined);
@@ -106,7 +101,7 @@ export default function ModifyUser() {
         setAddress(res.data.data[0].linkedAddress);
         setPhone(res.data.data[0].phone);
         setAccount(res.data.data[0].bankAmountId);
-        setPassword(res.data.data[0].unitName);
+        setPassword(res.data.data[0].password);
         setUnitId(res.data.data[0].unitId);
         setRoleId(res.data.data[0].roleId);
         console.log(res.data.data[0].name);
@@ -164,17 +159,54 @@ export default function ModifyUser() {
           mes: res.data.message,
           timeout: 3000,
         });
+        setName(undefined);
       }
     };
 
     postModify();
   }
 
-  const enterLogin = (e) => {
+  const enterQuery = (e) => {
     if (e.keyCode === 13) {
       queryUserInfo();
     }
   };
+
+  function handledelect() {
+    const postdelect = async () => {
+      let token = localStorage.getItem("token");
+      const options = {
+        url: POST_DELETE_USER,
+        method: "POST",
+        headers: {
+          "content-type": "application/x-www-form-urlencoded",
+          Authorization: token,
+        },
+        data: {
+          userName: userNameInput.current.value,
+        },
+        params: {
+          userName: userNameInput.current.value,
+        },
+      };
+      const res = await axios(options);
+
+      if (res.data.code === 200) {
+        toastController({
+          mes: "删除成功",
+          timeout: 2000,
+        });
+        setName(undefined);
+      } else {
+        toastController({
+          mes: res.data.message,
+          timeout: 3000,
+        });
+      }
+    };
+
+    postdelect();
+  }
 
   return (
     <div className="h-115 w-full p-5 bg-sky-50 relative">
@@ -189,7 +221,7 @@ export default function ModifyUser() {
         用户账号：
         <input
           ref={userNameInput}
-          onKeyUp={enterLogin}
+          onKeyUp={enterQuery}
           type="text"
           className="h-9 w-130 px-3"
         />
@@ -305,6 +337,7 @@ export default function ModifyUser() {
           <div
             className="h-9 w-20  rounded bg-red-200 transition-all duration-300 select-none
        hover:bg-red-300 text-gray-800 flex justify-center items-center float-right"
+            onClick={handledelect}
           >
             删除
           </div>

@@ -3,31 +3,13 @@ import { ToastContext } from "../../App";
 import { GET_ALL_OF_MY_ITEMS } from "../../utils/mapPath";
 import axios from "axios";
 import { usePersonalInformation } from "../PersonalPage";
-import { useNavigate, useParams, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import BackgroundCard from "../../Component/BackgroundCard";
 import { ItemSvg } from "../../svg";
 
 // 我的申请页面（只有身份为student才可看到）
 export default function MyItems() {
-  // const navigate = useNavigate();
-  // const [list, setList] = useState([
-  //   {
-  //     id: 1,
-  //     project: "大创",
-  //     detail:
-  //       "申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情.",
-  //     status: "已提交",
-  //   },
-  //   {
-  //     id: 2,
-  //     project: "数学建模",
-  //     detail:
-  //       "申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情,申请详情.",
-  //     status: "已提交",
-  //   },
-  // ]);
-
   const navigate = useNavigate();
   const toastController = useContext(ToastContext);
   const [list, setList] = useState([]);

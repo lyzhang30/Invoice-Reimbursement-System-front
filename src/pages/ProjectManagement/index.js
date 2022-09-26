@@ -49,8 +49,8 @@ export default function ProjectManagement() {
         console.log(res.data.data);
       } else {
         toastController({
-          mes: "请求失败!",
-          timeout: 1000,
+          mes: res.data.message,
+          timeout: 3000,
         });
       }
     };
@@ -290,12 +290,15 @@ export default function ProjectManagement() {
             list.map((item) => {
               return (
                 <div
-                  className="h-60 w-full p-5 relative select-none
+                  className="h-64 w-full p-5 relative select-none
              bg-blue-50 rounded transition-all duration-200 hover:bg-blue-100"
                 >
                   <div
                     className="h-12 w-fit max-w-full text-blue-600 text-3xl 
                font-bold truncate px-5 transition-all duration-200 hover:scale-x-110 hover:translate-x-3 hover:text-gray-700"
+                    onClick={() => {
+                      navigate(`/Project/${item.id}`);
+                    }}
                   >
                     {item.categoryName}
                   </div>
@@ -324,14 +327,18 @@ export default function ProjectManagement() {
                   </p>
                   <div
                     className="h-20 py-1 px-2 w-full flex-grow select-none block 
-                bg-white overflow-hidden break-all text-gray-500"
+                bg-white overflow-hidden break-all text-gray-500 mb-2"
                   >
                     {item.remark}
                   </div>
-
-                  <div className="h-8 mt-2 text-gray-600 select-none float-right">
-                    {item.startTime} 至 {item.endTime}
-                  </div>
+                  <p className="text-gray-600 select-none ml-5">
+                    <span className="text-gray-600 font-bold">开始时间：</span>
+                    {item.startTime}
+                  </p>
+                  <p className="text-gray-600 select-none ml-5">
+                    <span className="text-gray-600 font-bold">结束时间：</span>
+                    {item.endTime}
+                  </p>
                 </div>
               );
             })}

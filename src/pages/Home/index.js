@@ -35,7 +35,7 @@ export default function Home() {
         console.log(res.data.data);
       } else {
         toastController({
-          mes: "请求失败!",
+          mes: res.data.message,
           timeout: 1000,
         });
       }

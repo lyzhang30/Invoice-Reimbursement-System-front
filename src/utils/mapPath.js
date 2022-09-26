@@ -1,6 +1,11 @@
+export const BASE_PATH = "http://112.74.125.184:9527/common/download?name=";
+
 export const LOGIN = "/user/login";
+
 export const UPDATE_USER = "/user/update-user";
+
 export const GET_INFO_BY_TOKEN = "/user/get-by-token";
+
 export const GET_LOGIN_OUT = "/user/login-out";
 //获取所有模板
 export const GET_ALL_PROJECT = "/reimbursement-template/get-all";
@@ -39,7 +44,7 @@ export const POST_DELETE_INVOICE_DETAILS = "/invoice/delete-details";
 //管理员添加一个报销项目
 export const POST_ADD_A_PROJECT = "/reimbursement-template/insert-template";
 //管理员删除一个用户
-export const POST_DELETE_USER = "/user/disable-user";
+export const POST_DELETE_USER = "/user/disable1-user";
 //确定通过一个申请（审批）
 export const POST_AGREE_AN_APPLY = "/invoice/through-invoice";
 //确定驳回一条申请
@@ -48,10 +53,8 @@ export const POST_REJECT_AN_ALLPY = "/invoice/rejected-invoice";
 export const GET_BY_USERNAME = "/user/get-by-userName";
 //管理员修改用户信息
 export const POST_MODIFY_USER = "/user/update-user-by-administrator";
-//
-// export const  = "";
-//
-// export const  = "";
+//修改报销项目信息
+export const POST_MODIFY_PROJECT = "/reimbursement-template/update-template";
 //
 // export const  = "";
 //
