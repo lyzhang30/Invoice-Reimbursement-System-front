@@ -53,14 +53,14 @@ export default function Apply() {
   const toastController = useContext(ToastContext);
   const [update, setUpdate] = useState(true);
   const [info, setInfo] = useState(undefined);
-  const [filePath, setFilePath] = useState("");
+
   const [showAddWin, setShowAddWin] = useState(false);
-
-  const [invoiceimg, setInvoiceimg] = useState(undefined);
-  const [voucherimg, setVoucherimg] = useState(undefined);
-
   const [typeList, setTypeList] = useState([]);
   const [invoiceType, setInvoiceType] = useState(0);
+  const [invoiceimg, setInvoiceimg] = useState(undefined);
+  const [voucherimg, setVoucherimg] = useState(undefined);
+  const [filePath, setFilePath] = useState("");
+
   const taitouInput = useRef(null);
   const numberInput = useRef(null);
   const initPriceInput = useRef(null);
@@ -628,7 +628,10 @@ export default function Apply() {
                   info.invoiceDetailsList.length > 0 &&
                   info.invoiceDetailsList.map((item) => {
                     return (
-                      <div className="w-full h-112 bg-blue-50 flex flex-col justify-between items-center mb-3">
+                      <div
+                        className="w-full h-112 bg-blue-50 flex flex-col justify-between items-center 
+                      border-blue-300 border-2 mb-14"
+                      >
                         {/* 发票两张图 */}
                         <div className="h-100 w-full flex items-center justify-between p-1 space-x-2">
                           {/* 左边发票 */}

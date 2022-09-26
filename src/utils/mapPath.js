@@ -38,12 +38,12 @@ export const POST_ADD_INVOICE_DETAILS = "/invoice/add-details";
 export const POST_DELETE_INVOICE_DETAILS = "/invoice/delete-details";
 //管理员添加一个报销项目
 export const POST_ADD_A_PROJECT = "/reimbursement-template/insert-template";
-//
-// export const  = "";
-//
-// export const  = "";
-//
-// export const  = "";
+//管理员删除一个用户
+export const POST_DELETE_USER = "/user/disable-user";
+//确定通过一个申请（审批）
+export const POST_AGREE_AN_APPLY = "/invoice/through-invoice";
+//确定驳回一条申请
+export const POST_REJECT_AN_ALLPY = "/invoice/rejected-invoice";
 //
 // export const  = "";
 //

@@ -7,6 +7,7 @@ import { usePersonalInformation } from "../../pages/PersonalPage";
 
 // 背景组件
 export default function BackgroundCard(props) {
+  usePersonalInformation();
   return (
     <div
       className="h-screen w-screen flex flex-col justify-between items-center"

@@ -70,12 +70,13 @@ export default function MyItems() {
           {list !== undefined &&
             list.length > 0 &&
             list.map((item) => {
+              if (item.status === "已撤回") {
+                return null;
+              }
               return (
                 <div
-                  className={`h-32 w-full  rounded py-3 px-6
-                 flex justify-between items-center mb-3 ${
-                   item.status === "已撤回" ? "bg-gray-300" : "bg-sky-50"
-                 }`}
+                  className={`h-32 w-full  rounded py-3 px-6 bg-sky-50
+                 flex justify-between items-center mb-3 `}
                   onClick={() => {
                     if (item.status !== "已撤回") {
                       navigate(`/Apply/${item.id}`);
