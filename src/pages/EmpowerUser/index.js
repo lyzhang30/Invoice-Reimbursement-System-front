@@ -6,12 +6,13 @@ import {
   GET_ROLE_TYPE,
   POST_MODIFY_USER,
   POST_DELETE_USER,
+  POST_EMPOWER,
 } from "../../utils/mapPath";
 import axios from "axios";
 import { usePersonalInformation } from "../PersonalPage";
-// import { useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 
-export default function ModifyUser() {
+export default function EmpowerUser() {
   usePersonalInformation();
   const [unitTypeList, setUnitTypeList] = useState([]);
   const [unitId, setUnitId] = useState(0);
@@ -26,6 +27,7 @@ export default function ModifyUser() {
   const [phone, setPhone] = useState(undefined);
   const [account, setAccount] = useState(undefined);
   const [password, setPassword] = useState(undefined);
+  const [userId, setUserId] = useState(undefined);
 
   useEffect(() => {
     //获取单位类型
@@ -104,7 +106,8 @@ export default function ModifyUser() {
         setPassword(res.data.data[0].password);
         setUnitId(res.data.data[0].unitId);
         setRoleId(res.data.data[0].roleId);
-        console.log(res.data.data[0].name);
+        setUserId(res.data.data[0].id);
+        // console.log(res.data.data[0].name);
       } else {
         toastController({
           mes: res.data.message,
@@ -116,42 +119,24 @@ export default function ModifyUser() {
     getUserInfo();
   }
 
-  function handleModify() {
-    const postModify = async () => {
+  function handleEmpower() {
+    const postEmpower = async () => {
       let token = localStorage.getItem("token");
       const options = {
-        url: POST_MODIFY_USER,
+        url: POST_EMPOWER,
         method: "POST",
         headers: {
           "content-type": "application/x-www-form-urlencoded",
           Authorization: token,
         },
-        data: {
-          userName: userNameInput.current.value,
-          name: name,
-          linkedAddress: address,
-          phone: phone,
-          bankAmountId: account,
-          password: password,
-          unitId: unitId,
-          roleId: roleId,
-        },
-        params: {
-          userName: userNameInput.current.value,
-          name: name,
-          linkedAddress: address,
-          phone: phone,
-          bankAmountId: account,
-          password: password,
-          unitId: unitId,
-          roleId: roleId,
-        },
+        data: { userId: userId, unitId: unitId },
+        params: { userId: userId, unitId: unitId },
       };
       const res = await axios(options);
 
       if (res.data.code === 200) {
         toastController({
-          mes: "修改成功！",
+          mes: "授权成功！",
           timeout: 2000,
         });
       } else {
@@ -163,7 +148,7 @@ export default function ModifyUser() {
       }
     };
 
-    postModify();
+    postEmpower();
   }
 
   const enterQuery = (e) => {
@@ -172,46 +157,10 @@ export default function ModifyUser() {
     }
   };
 
-  function handledelect() {
-    const postdelect = async () => {
-      let token = localStorage.getItem("token");
-      const options = {
-        url: POST_DELETE_USER,
-        method: "POST",
-        headers: {
-          "content-type": "application/x-www-form-urlencoded",
-          Authorization: token,
-        },
-        data: {
-          userName: userNameInput.current.value,
-        },
-        params: {
-          userName: userNameInput.current.value,
-        },
-      };
-      const res = await axios(options);
-
-      if (res.data.code === 200) {
-        toastController({
-          mes: "删除成功",
-          timeout: 2000,
-        });
-        setName(undefined);
-      } else {
-        toastController({
-          mes: res.data.message,
-          timeout: 3000,
-        });
-      }
-    };
-
-    postdelect();
-  }
-
   return (
     <div className="h-115 w-full p-5 bg-sky-50 relative">
       <div
-        className="h-9 w-20 mr-52 rounded bg-blue-200 transition-all duration-300 select-none
+        className="h-9 w-20 mr-5 rounded bg-blue-200 transition-all duration-300 select-none
        hover:bg-blue-300 text-gray-800 flex justify-center items-center float-right"
         onClick={queryUserInfo}
       >
@@ -233,76 +182,57 @@ export default function ModifyUser() {
           <p>
             用户昵称：
             <input
+              disabled
               value={name !== undefined ? name : ""}
               type="text"
               className="h-9 w-96 px-3"
-              onChange={(e) => {
-                setName(e.target.value);
-              }}
             />
           </p>
           <br />
           <p>
             联系手机：
             <input
+              disabled
               value={phone !== undefined ? phone : ""}
               type="text"
               className="h-9 w-96 px-3"
-              onChange={(e) => {
-                setPhone(e.target.value);
-              }}
             />
           </p>
           <br />
           <p>
             联系地址：
             <input
+              disabled
               value={address !== undefined ? address : ""}
               type="text"
               className="h-9 w-96 px-3"
-              onChange={(e) => {
-                setAddress(e.target.value);
-              }}
             />
           </p>
           <br />
           <p>
             银行账号：
             <input
+              disabled
               value={account !== undefined ? account : ""}
               type="text"
               className="h-9 w-96 px-3"
-              onChange={(e) => {
-                setAccount(e.target.value);
-              }}
             />
           </p>
           <br />
           <p>
-            所属单位：
-            <select
-              onChange={(e) => {
-                setUnitId(e.target.value);
-              }}
-            >
-              <option value="" className="h-8"></option>
-              {unitTypeList.map((type) => {
-                return (
-                  <option
-                    value={type.id}
-                    selected={`${type.id === unitId ? "selected" : ""}`}
-                    className="h-8"
-                  >
-                    {type.name}
-                  </option>
-                );
-              })}
-            </select>
+            账号密码：
+            <input
+              disabled
+              value={password !== undefined ? password : ""}
+              type="text"
+              className="h-9 w-96 px-3"
+            />
           </p>
           <br />
           <p>
             账号角色：
             <select
+              disabled
               onChange={(e) => {
                 setRoleId(e.target.value);
               }}
@@ -323,30 +253,30 @@ export default function ModifyUser() {
           </p>
           <br />
           <p>
-            账号密码：
-            <input
-              value={password !== undefined ? password : ""}
-              type="text"
-              className="h-9 w-96 px-3"
+            管理单位：
+            <select
               onChange={(e) => {
-                setPassword(e.target.value);
+                setUnitId(e.target.value);
               }}
-            />
+            >
+              <option value="" className="h-8"></option>
+              {unitTypeList.map((type) => {
+                return (
+                  <option value={type.id} className="h-8">
+                    {type.name}
+                  </option>
+                );
+              })}
+            </select>
           </p>
           <br />
+          {/* 授权按钮 */}
           <div
-            className="h-9 w-20 mr-28  rounded bg-red-200 transition-all duration-300 select-none
-       hover:bg-red-300 text-gray-800 flex justify-center items-center float-right"
-            onClick={handledelect}
-          >
-            删除
-          </div>
-          <div
-            className="h-9 w-20 mr-5 rounded bg-yellow-200 transition-all duration-300 select-none
+            className="h-9 w-20 rounded bg-yellow-200 transition-all duration-300 select-none
        hover:bg-yellow-300 text-gray-800 flex justify-center items-center float-right"
-            onClick={handleModify}
+            onClick={handleEmpower}
           >
-            修改
+            授权
           </div>
         </>
       )}

@@ -115,32 +115,32 @@ export default function AddUser() {
     <div className="h-115 w-full p-5 bg-sky-50 relative">
       <p>
         用户账号：
-        <input ref={userNameInput} type="text" className="h-8 w-130 px-3" />
+        <input ref={userNameInput} type="text" className="h-8 w-96 px-3" />
       </p>
       <br />
       <p>
         用户昵称：
-        <input ref={nameInput} type="text" className="h-8 w-130 px-3" />
+        <input ref={nameInput} type="text" className="h-8 w-96 px-3" />
       </p>
       <br />
       <p>
         邮箱地址：
-        <input ref={emailInput} type="text" className="h-8 w-130 px-3" />
+        <input ref={emailInput} type="text" className="h-8 w-96 px-3" />
       </p>
       <br />
       <p>
         联系手机：
-        <input ref={phoneInput} type="text" className="h-8 w-130 px-3" />
+        <input ref={phoneInput} type="text" className="h-8 w-96 px-3" />
       </p>
       <br />
       <p>
         联系地址：
-        <input ref={addressInput} type="text" className="h-8 w-130 px-3" />
+        <input ref={addressInput} type="text" className="h-8 w-96 px-3" />
       </p>
       <br />
       <p>
         银行账号：
-        <input ref={accountInput} type="text" className="h-8 w-130 px-3" />
+        <input ref={accountInput} type="text" className="h-8 w-96 px-3" />
       </p>
       <br />
       <p>
@@ -181,7 +181,7 @@ export default function AddUser() {
       <br />
       <p>
         账号密码：
-        <input ref={passwordInput} type="text" className="h-8 w-130 px-3" />
+        <input ref={passwordInput} type="text" className="h-8 w-96 px-3" />
       </p>
 
       <div

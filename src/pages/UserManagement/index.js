@@ -46,6 +46,20 @@ export default function UserManagement() {
             >
               修改
             </div>
+            {/* 授权按钮 */}
+            <div
+              className={`h-9 w-fit px-8 font-bold flex justify-center select-none
+               items-center rounded ${
+                 isFocus(path, "EmpowerUser") === true
+                   ? "text-blue-600 bg-sky-100"
+                   : "text-sky-600"
+               }`}
+              onClick={() => {
+                navigate(`/UserManagement/EmpowerUser`);
+              }}
+            >
+              授权
+            </div>
           </div>
           <Outlet />
         </div>

@@ -1,6 +1,10 @@
 import React, { useContext, useState, useEffect } from "react";
 import { ToastContext } from "../../App";
-import { GET_PROJECT_BY_ID, POST_ADD_AN_APPLY } from "../../utils/mapPath";
+import {
+  GET_PROJECT_BY_ID,
+  POST_ADD_AN_APPLY,
+  BASE_PATH,
+} from "../../utils/mapPath";
 import axios from "axios";
 import { usePersonalInformation } from "../PersonalPage";
 import { useNavigate, useParams } from "react-router-dom";
@@ -122,14 +126,20 @@ export default function Project() {
           <Label>
             是否要经学院同意：{info.applyCategory === "0" ? "是" : "否"}
           </Label>
-          <Label>附件：</Label>
-          <a
-            href={info.fileAddress}
-            download="test"
-            className="h-7 w-fit px-8 bg-sky-100 rounded-sm select-none"
-          >
-            点击下载附件
-          </a>
+          {info.fileAddress !== null && (
+            <>
+              <Label>附件：</Label>
+              <a
+                // href={`${BASE_PATH}${info.fileAddress}`}
+                href={`${BASE_PATH}c072a682-b370-4728-83a3-99531c063fa2.csv`}
+                download="test"
+                className="h-7 w-fit px-8 bg-sky-100 rounded-sm select-none"
+              >
+                点击下载附件
+              </a>
+            </>
+          )}
+
           <Label>起止时间：</Label>
           <p>
             {info.startTime} 至 {info.endTime}

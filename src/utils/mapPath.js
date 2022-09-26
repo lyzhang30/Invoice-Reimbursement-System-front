@@ -55,10 +55,10 @@ export const GET_BY_USERNAME = "/user/get-by-userName";
 export const POST_MODIFY_USER = "/user/update-user-by-administrator";
 //修改报销项目信息
 export const POST_MODIFY_PROJECT = "/reimbursement-template/update-template";
-//
-// export const  = "";
-//
-// export const  = "";
+//管理员给单位授权
+export const POST_EMPOWER = "/user-unit-map/add-unit-map";
+//管理员移除单位权力
+// export const POST_ = "/user-unit-map/delete-unit-map";
 //
 // export const  = "";
 //

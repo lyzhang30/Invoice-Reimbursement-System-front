@@ -78,7 +78,15 @@ export default function ProjectModify() {
           fileAddress: filePath,
           remark: remark,
         },
-        params: {},
+        params: {
+          id: id,
+          categoryName: categoryName,
+          applyCategory: applyCategory,
+          startTime: startTime,
+          endTime: endTime,
+          fileAddress: filePath,
+          remark: remark,
+        },
       };
       const res = await axios(options);
 

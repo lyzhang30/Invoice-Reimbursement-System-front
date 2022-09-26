@@ -8,6 +8,7 @@ import {
   GET_ALL_INVOICE_TYPE,
   POST_ADD_INVOICE_DETAILS,
   POST_DELETE_INVOICE_DETAILS,
+  BASE_PATH,
 } from "../../utils/mapPath";
 import axios from "axios";
 import { usePersonalInformation } from "../PersonalPage";
@@ -641,7 +642,8 @@ export default function Apply() {
                           {/* 左边发票 */}
                           <div className="h-full flex-grow w-96 bg-gray-50 border border-gray-400">
                             <img
-                              src={`http://112.74.125.184:9527/common/download?name=${item.invoicePath}`}
+                              src={`${BASE_PATH}${item.invoicePath}`}
+                              // src={`http://112.74.125.184:9527/common/download?name=${item.invoicePath}`}
                               alt="发票"
                               className="max-h-full max-w-full block m-auto"
                             />
