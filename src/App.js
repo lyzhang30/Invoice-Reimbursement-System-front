@@ -18,7 +18,7 @@ const ProjectModify = lazy(() => import("./pages/ProjectModify"));
 const AddUser = lazy(() => import("./pages/AddUser"));
 const SelectUser = lazy(() => import("./pages/SelectUser"));
 const ModifyUser = lazy(() => import("./pages/ModifyUser"));
-const DeleteUser = lazy(() => import("./pages/DeleteUser"));
+
 // const  = lazy(() => import(""));
 // const  = lazy(() => import(""));
 
@@ -82,7 +82,6 @@ function App() {
                   <Route path="AddUser" element={<AddUser />} />
                   <Route path="SelectUser" element={<SelectUser />} />
                   <Route path="ModifyUser" element={<ModifyUser />} />
-                  <Route path="DeleteUser" element={<DeleteUser />} />
                 </Route>
                 <Route path="*" element={<GoWrong404 />}></Route>
               </Routes>

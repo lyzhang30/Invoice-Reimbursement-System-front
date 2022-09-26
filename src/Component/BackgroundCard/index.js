@@ -51,7 +51,7 @@ export default function BackgroundCard(props) {
 }
 
 function LeftNav() {
-  const { roleName } = usePersonalInformation();
+  usePersonalInformation();
   function isFocus(path, str) {
     if (path.search(str) !== -1) return true;
     return false;

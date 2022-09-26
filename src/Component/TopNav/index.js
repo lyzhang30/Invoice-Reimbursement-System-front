@@ -13,7 +13,9 @@ export default function TopNav(props) {
     let hour = date.getHours();
     let minute = date.getMinutes();
     setTime((time) => {
-      return (time = `${year} 年 ${month} 月 ${day} 日 ${hour} ：${minute}`);
+      return (time = `${year} 年 ${month} 月 ${day} 日 ${hour} ：${
+        minute < 10 ? "0" : ""
+      }${minute}`);
     });
   }
 

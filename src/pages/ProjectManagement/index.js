@@ -8,14 +8,14 @@ import {
 } from "../../utils/mapPath";
 import axios from "axios";
 import { usePersonalInformation } from "../PersonalPage";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import { BackSvg, AddSvg, CancelSvg, SubmitSvg, CloseSvg } from "../../svg";
+import { useNavigate } from "react-router-dom";
+import { AddSvg, CloseSvg } from "../../svg";
 import BackgroundCard from "../../Component/BackgroundCard";
-import ItemCard from "../../Component/ItemCard";
 
 // TODO:获取所有项目的列表
 export default function ProjectManagement() {
   const navigate = useNavigate();
+  usePersonalInformation();
   const toastController = useContext(ToastContext);
   const [list, setList] = useState([]);
   const [showAddWin, setShowAddWin] = useState(false);
@@ -84,18 +84,14 @@ export default function ProjectManagement() {
       if (res.data.code === 200) {
         toastController({
           mes: "撤销成功!",
-          timeout: 1000,
+          timeout: 2000,
         });
       } else {
         toastController({
-          mes: "撤销失败!",
-          timeout: 1000,
+          mes: res.data.message,
+          timeout: 3000,
         });
       }
-      //回到我的申请页面
-      setTimeout(() => {
-        navigate("/MyItems");
-      }, 1000);
     };
     fun();
   }
@@ -104,6 +100,7 @@ export default function ProjectManagement() {
     setShowAddWin(false);
   };
 
+  //确定增加一个报销项目
   const handleDetermineAdd = () => {
     const postAddNewProject = async () => {
       let token = localStorage.getItem("token");
@@ -136,10 +133,17 @@ export default function ProjectManagement() {
         },
       };
       const res = await axios(options);
-      toastController({
-        mes: res.data.message,
-        timeout: 1000,
-      });
+      if (res.data.code === 200) {
+        toastController({
+          mes: "增加成功!",
+          timeout: 2000,
+        });
+      } else {
+        toastController({
+          mes: res.data.message,
+          timeout: 3000,
+        });
+      }
     };
     postAddNewProject();
     setShowAddWin(false);

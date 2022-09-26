@@ -20,12 +20,12 @@ export default function UserManagement() {
           <div className="h-10 w-full flex justify-around items-center bg-blue-200">
             {/* 新增按钮 */}
             <div
-              className={`h-full w-fit px-6 font-bold flex justify-center select-none
-               items-center ${
-                 isFocus(path, "AddUser") === true
-                   ? "text-red-800"
-                   : "text-sky-600"
-               }`}
+              className={`h-9 w-fit px-8 font-bold flex justify-center select-none
+              items-center rounded ${
+                isFocus(path, "AddUser") === true
+                  ? "text-blue-600 bg-sky-100"
+                  : "text-sky-600"
+              }`}
               onClick={() => {
                 navigate(`/UserManagement/AddUser`);
               }}
@@ -34,10 +34,10 @@ export default function UserManagement() {
             </div>
             {/* 修改按钮 */}
             <div
-              className={`h-full w-fit px-6  font-bold flex justify-center select-none
-               items-center ${
+              className={`h-9 w-fit px-8 font-bold flex justify-center select-none
+               items-center rounded ${
                  isFocus(path, "ModifyUser") === true
-                   ? "text-red-800"
+                   ? "text-blue-600 bg-sky-100"
                    : "text-sky-600"
                }`}
               onClick={() => {
@@ -45,20 +45,6 @@ export default function UserManagement() {
               }}
             >
               修改
-            </div>
-            {/* 删除按钮 */}
-            <div
-              className={`h-full w-fit px-6 font-bold flex justify-center select-none
-               items-center ${
-                 isFocus(path, "DeleteUser") === true
-                   ? "text-red-800"
-                   : "text-sky-600"
-               }`}
-              onClick={() => {
-                navigate(`/UserManagement/DeleteUser`);
-              }}
-            >
-              删除
             </div>
           </div>
           <Outlet />

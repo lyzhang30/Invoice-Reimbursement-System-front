@@ -1,87 +1,322 @@
-import React from "react";
-import { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
+import { ToastContext } from "../../App";
+import {
+  GET_BY_USERNAME,
+  GET_UNIT_TYPE,
+  GET_ROLE_TYPE,
+  POST_MODIFY_USER,
+} from "../../utils/mapPath";
+import axios from "axios";
+import { usePersonalInformation } from "../PersonalPage";
+// import { useNavigate, useParams } from "react-router-dom";
 
 export default function ModifyUser() {
-  const [userInfo, setUserInfo] = useState({});
+  usePersonalInformation();
   const [unitTypeList, setUnitTypeList] = useState([]);
-  const [unit, setUnit] = useState("");
+  const [unitId, setUnitId] = useState(0);
   const [roleIdList, setRoleIdList] = useState([]);
   const [roleId, setRoleId] = useState(0);
+  const toastController = useContext(ToastContext);
+
+  const userNameInput = useRef(null);
+  // const nameInput = useRef(null);
+  // const phoneInput = useRef(null);
+  // const addressInput = useRef(null);
+  // const passwordInput = useRef(null);
+  // const accountInput = useRef(null);
+  // const emailInput = useRef(null);
+
+  const [name, setName] = useState(undefined);
+  const [address, setAddress] = useState(undefined);
+  const [phone, setPhone] = useState(undefined);
+  const [account, setAccount] = useState(undefined);
+  const [password, setPassword] = useState(undefined);
+
+  useEffect(() => {
+    //获取单位类型
+    const fetchData1 = async () => {
+      let token = localStorage.getItem("token");
+      const options = {
+        url: GET_UNIT_TYPE,
+        method: "GET",
+        headers: {
+          "content-type": "application/x-www-form-urlencoded",
+          Authorization: token,
+        },
+      };
+      const res = await axios(options);
+
+      if (res.data.code === 200) {
+        setUnitTypeList(res.data.data);
+      } else {
+        toastController({
+          mes: res.data.message,
+          timeout: 1000,
+        });
+      }
+    };
+    //获取角色类型
+    const fetchData2 = async () => {
+      let token = localStorage.getItem("token");
+      const options = {
+        url: GET_ROLE_TYPE,
+        method: "GET",
+        headers: {
+          "content-type": "application/json",
+          Authorization: token,
+        },
+      };
+      const res = await axios(options);
+
+      if (res.data.code === 200) {
+        setRoleIdList(res.data.data);
+      } else {
+        toastController({
+          mes: res.data.message,
+          timeout: 1000,
+        });
+      }
+    };
+
+    fetchData1();
+    fetchData2();
+  }, []);
+
+  function queryUserInfo() {
+    const getUserInfo = async () => {
+      let token = localStorage.getItem("token");
+      const options = {
+        url: GET_BY_USERNAME,
+        method: "GET",
+        headers: {
+          "content-type": "application/x-www-form-urlencoded",
+          Authorization: token,
+        },
+        data: {
+          userName: userNameInput.current.value,
+        },
+        params: {
+          userName: userNameInput.current.value,
+        },
+      };
+      const res = await axios(options);
+
+      if (res.data.code === 200) {
+        setName(res.data.data[0].name);
+        setAddress(res.data.data[0].linkedAddress);
+        setPhone(res.data.data[0].phone);
+        setAccount(res.data.data[0].bankAmountId);
+        setPassword(res.data.data[0].unitName);
+        setUnitId(res.data.data[0].unitId);
+        setRoleId(res.data.data[0].roleId);
+        console.log(res.data.data[0].name);
+      } else {
+        toastController({
+          mes: res.data.message,
+          timeout: 3000,
+        });
+      }
+    };
+
+    getUserInfo();
+  }
+
+  function handleModify() {
+    const postModify = async () => {
+      let token = localStorage.getItem("token");
+      const options = {
+        url: POST_MODIFY_USER,
+        method: "POST",
+        headers: {
+          "content-type": "application/x-www-form-urlencoded",
+          Authorization: token,
+        },
+        data: {
+          userName: userNameInput.current.value,
+          name: name,
+          linkedAddress: address,
+          phone: phone,
+          bankAmountId: account,
+          password: password,
+          unitId: unitId,
+          roleId: roleId,
+        },
+        params: {
+          userName: userNameInput.current.value,
+          name: name,
+          linkedAddress: address,
+          phone: phone,
+          bankAmountId: account,
+          password: password,
+          unitId: unitId,
+          roleId: roleId,
+        },
+      };
+      const res = await axios(options);
+
+      if (res.data.code === 200) {
+        toastController({
+          mes: "修改成功！",
+          timeout: 2000,
+        });
+      } else {
+        toastController({
+          mes: res.data.message,
+          timeout: 3000,
+        });
+      }
+    };
+
+    postModify();
+  }
+
+  const enterLogin = (e) => {
+    if (e.keyCode === 13) {
+      queryUserInfo();
+    }
+  };
 
   return (
     <div className="h-115 w-full p-5 bg-sky-50 relative">
-      <p>
-        所修改的用户账号：
-        <input type="text" className="h-9 w-120 px-3" />
-      </p>
-      <br />
-      <p>
-        用户昵称：
-        <input type="text" className="h-9 w-130 px-3" />
-      </p>
-      <br />
-      <p>
-        联系手机：
-        <input type="text" className="h-9 w-130 px-3" />
-      </p>
-      <br />
-      <p>
-        联系地址：
-        <input type="text" className="h-9 w-130 px-3" />
-      </p>
-      <br />
-      <p>
-        银行账号：
-        <input type="text" className="h-9 w-130 px-3" />
-      </p>
-      <br />
-      <p>
-        所属单位：
-        <select
-          onChange={(e) => {
-            setUnit(e.target.value);
-          }}
-        >
-          <option value="" className="h-8"></option>
-          {unitTypeList.map((type) => {
-            return (
-              <option value={type.id} className="h-8">
-                {type.name}
-              </option>
-            );
-          })}
-        </select>
-      </p>
-      <br />
-      <p>
-        账号角色：
-        <select
-          onChange={(e) => {
-            setRoleId(e.target.value);
-          }}
-        >
-          <option value="" className="h-8"></option>
-          {roleIdList.map((role) => {
-            return (
-              <option value={role.id} className="h-8">
-                {role.name}
-              </option>
-            );
-          })}
-        </select>
-      </p>
-      <br />
-      <p>
-        账号密码：
-        <input type="text" className="h-9 w-130 px-3" />
-      </p>
-      <br />
       <div
-        className="h-9 w-20 rounded bg-yellow-200 transition-all duration-300 select-none
-       hover:bg-yellow-300 text-gray-800 flex justify-center items-center float-right"
+        className="h-9 w-20 mr-5 rounded bg-blue-200 transition-all duration-300 select-none
+       hover:bg-blue-300 text-gray-800 flex justify-center items-center float-right"
+        onClick={queryUserInfo}
       >
-        修改
+        查询
       </div>
+      <p>
+        用户账号：
+        <input
+          ref={userNameInput}
+          onKeyUp={enterLogin}
+          type="text"
+          className="h-9 w-130 px-3"
+        />
+      </p>
+      <br />
+      {/* 查询后显示 */}
+      {name !== undefined && (
+        <>
+          <p>
+            用户昵称：
+            <input
+              value={name !== undefined ? name : ""}
+              type="text"
+              className="h-9 w-130 px-3"
+              onChange={(e) => {
+                setName(e.target.value);
+              }}
+            />
+          </p>
+          <br />
+          <p>
+            联系手机：
+            <input
+              value={phone !== undefined ? phone : ""}
+              type="text"
+              className="h-9 w-130 px-3"
+              onChange={(e) => {
+                setPhone(e.target.value);
+              }}
+            />
+          </p>
+          <br />
+          <p>
+            联系地址：
+            <input
+              value={address !== undefined ? address : ""}
+              type="text"
+              className="h-9 w-130 px-3"
+              onChange={(e) => {
+                setAddress(e.target.value);
+              }}
+            />
+          </p>
+          <br />
+          <p>
+            银行账号：
+            <input
+              value={account !== undefined ? account : ""}
+              type="text"
+              className="h-9 w-130 px-3"
+              onChange={(e) => {
+                setAccount(e.target.value);
+              }}
+            />
+          </p>
+          <br />
+          <p>
+            所属单位：
+            <select
+              onChange={(e) => {
+                setUnitId(e.target.value);
+              }}
+            >
+              <option value="" className="h-8"></option>
+              {unitTypeList.map((type) => {
+                return (
+                  <option
+                    value={type.id}
+                    selected={`${type.id === unitId ? "selected" : ""}`}
+                    className="h-8"
+                  >
+                    {type.name}
+                  </option>
+                );
+              })}
+            </select>
+          </p>
+          <br />
+          <p>
+            账号角色：
+            <select
+              onChange={(e) => {
+                setRoleId(e.target.value);
+              }}
+            >
+              <option value="" className="h-8"></option>
+              {roleIdList.map((role) => {
+                return (
+                  <option
+                    value={role.id}
+                    selected={`${role.id === roleId ? "selected" : ""}`}
+                    className="h-8"
+                  >
+                    {role.name}
+                  </option>
+                );
+              })}
+            </select>
+          </p>
+          <br />
+          <p>
+            账号密码：
+            <input
+              value={password !== undefined ? password : ""}
+              type="text"
+              className="h-9 w-130 px-3"
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+            />
+          </p>
+          <br />
+          <div
+            className="h-9 w-20  rounded bg-red-200 transition-all duration-300 select-none
+       hover:bg-red-300 text-gray-800 flex justify-center items-center float-right"
+          >
+            删除
+          </div>
+          <div
+            className="h-9 w-20 mr-5 rounded bg-yellow-200 transition-all duration-300 select-none
+       hover:bg-yellow-300 text-gray-800 flex justify-center items-center float-right"
+            onClick={handleModify}
+          >
+            修改
+          </div>
+        </>
+      )}
     </div>
   );
 }

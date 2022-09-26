@@ -75,7 +75,7 @@ export default function MyItems() {
               }
               return (
                 <div
-                  className={`h-32 w-full  rounded py-3 px-6 bg-sky-50
+                  className={`h-32 w-full select-none rounded py-3 px-6 bg-sky-50
                  flex justify-between items-center mb-3 `}
                   onClick={() => {
                     if (item.status !== "已撤回") {

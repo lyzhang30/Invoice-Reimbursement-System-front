@@ -44,10 +44,10 @@ export const POST_DELETE_USER = "/user/disable-user";
 export const POST_AGREE_AN_APPLY = "/invoice/through-invoice";
 //确定驳回一条申请
 export const POST_REJECT_AN_ALLPY = "/invoice/rejected-invoice";
-//
-// export const  = "";
-//
-// export const  = "";
+//根据用户账号获取用户信息
+export const GET_BY_USERNAME = "/user/get-by-userName";
+//管理员修改用户信息
+export const POST_MODIFY_USER = "/user/update-user-by-administrator";
 //
 // export const  = "";
 //
