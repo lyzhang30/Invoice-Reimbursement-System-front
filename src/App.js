@@ -16,10 +16,11 @@ const ProjectManagement = lazy(() => import("./pages/ProjectManagement"));
 const UserManagement = lazy(() => import("./pages/UserManagement"));
 const ProjectModify = lazy(() => import("./pages/ProjectModify"));
 const AddUser = lazy(() => import("./pages/AddUser"));
-// const SelectUser = lazy(() => import("./pages/SelectUser"));
 const ModifyUser = lazy(() => import("./pages/ModifyUser"));
-const EmpowerUser = lazy(() => import("./pages/DeleteUser"));
-// const  = lazy(() => import(""));
+const EmpowerUser = lazy(() => import("./pages/EmpowerUser"));
+const ModifyUnit = lazy(() => import("./pages/ModifyUnit"));
+const UnitManagement = lazy(() => import("./pages/UnitManagement"));
+const Addunit = lazy(() => import("./pages/Addunit"));
 // const  = lazy(() => import(""));
 
 function App() {
@@ -78,6 +79,10 @@ function App() {
                   <Route path="AddUser" element={<AddUser />} />
                   <Route path="ModifyUser" element={<ModifyUser />} />
                   <Route path="EmpowerUser" element={<EmpowerUser />} />
+                </Route>
+                <Route path="UnitManagement" element={<UnitManagement />}>
+                  <Route path="Addunit" element={<Addunit />} />
+                  <Route path="ModifyUnit" element={<ModifyUnit />} />
                 </Route>
                 <Route path="*" element={<GoWrong404 />}></Route>
               </Routes>

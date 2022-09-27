@@ -639,7 +639,9 @@ export default function Apply() {
                   </p>
                   <p>
                     <Label>是否需要所属单位审核：</Label>
-                    <Content>{info.applyCategory === 0 ? "是" : "否"}</Content>
+                    <Content>
+                      {info.applyCategory === "0" ? "是" : "否"}
+                    </Content>
                   </p>
                   <p>
                     <Label>到账银行账号：</Label>

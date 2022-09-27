@@ -59,6 +59,16 @@ export const POST_MODIFY_PROJECT = "/reimbursement-template/update-template";
 export const POST_EMPOWER = "/user-unit-map/add-unit-map";
 //管理员移除单位权力
 // export const POST_ = "/user-unit-map/delete-unit-map";
+//新增单位
+export const POST_ADD_A_UNIT = "/dd-unit/insert-unit";
+//管理员修改单位信息
+export const POST_MODIFY_UNIT = "/dd-unit/update-unit";
+//获取所有的单位
+export const GET_ALL_UNIT = "/dd-unit/get-unit";
+//根据id删除单位信息
+export const POST_DELETE_UNIT = "/dd-unit/delete-unit";
+//根据单位名称查询单位信息
+export const GET_BY_UNITNAME = "/dd-unit/get-by-unitName";
 //
 // export const  = "";
 //

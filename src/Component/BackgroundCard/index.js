@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import StuLogo from "../../img/R-C.png";
-import Svg1, { Svg2, Svg3, Svg4, Svg5 } from "../../svg";
+import Svg1, { Svg2, Svg3, Svg4, Svg5, Svg8 } from "../../svg";
 import TopNav from "../TopNav";
 import { usePersonalInformation } from "../../pages/PersonalPage";
 
@@ -156,6 +156,24 @@ function LeftNav() {
           <div
             className={` w-0 border-l-4 border-blue-600 transition-all duration-500 group-hover:h-full
             ${isFocus(path, "UserManagement") === true ? "h-full" : "h-0"}`}
+          ></div>
+        </div>
+      )}
+      {/* 单位管理按钮  */}
+      {roleName === "管理员" && (
+        <div className="h-14 w-full flex justify-between items-center space-x-1 pl-1 select-none group">
+          <div className={`h-8 w-8 flex justify-center items-center `}>
+            <Svg8></Svg8>
+          </div>
+          <Link
+            to={`/UnitManagement/Addunit`}
+            className={`h-full w-10 flex-grow flex justify-start items-center text-blue-500`}
+          >
+            单位管理
+          </Link>
+          <div
+            className={` w-0 border-l-4 border-blue-600 transition-all duration-500 group-hover:h-full
+            ${isFocus(path, "UnitManagement") === true ? "h-full" : "h-0"}`}
           ></div>
         </div>
       )}

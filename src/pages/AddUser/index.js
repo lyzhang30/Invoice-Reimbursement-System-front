@@ -216,7 +216,7 @@ export default function AddUser() {
       </p>
 
       <div
-        className="h-9 w-20 rounded bg-yellow-200 transition-all duration-300 select-none
+        className="h-9 w-20 rounded mr-64 bg-yellow-200 transition-all duration-300 select-none
        hover:bg-yellow-300 text-gray-800 flex justify-center items-center float-right"
         onClick={handleAdd}
       >
