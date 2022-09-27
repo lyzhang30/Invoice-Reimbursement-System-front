@@ -1,10 +1,9 @@
 import React, { useContext, useState, useEffect } from "react";
 import { ToastContext } from "../../App";
-import { GET_ALL_OF_MY_ITEMS } from "../../utils/mapPath";
+import { GET_ALL_OF_MY_ITEMS, GET_INFO_BY_TOKEN } from "../../utils/mapPath";
 import axios from "axios";
-import { usePersonalInformation } from "../PersonalPage";
+// import { usePersonalInformation } from "../PersonalPage";
 import { useNavigate } from "react-router-dom";
-
 import BackgroundCard from "../../Component/BackgroundCard";
 import { ItemSvg } from "../../svg";
 
@@ -13,7 +12,6 @@ export default function MyItems() {
   const navigate = useNavigate();
   const toastController = useContext(ToastContext);
   const [list, setList] = useState([]);
-  usePersonalInformation();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,6 +39,34 @@ export default function MyItems() {
         navigate(-1);
       }
     };
+    //判断是否登录
+    const isLogin = async () => {
+      let token = localStorage.getItem("token");
+
+      const options = {
+        url: GET_INFO_BY_TOKEN,
+        method: "GET",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Authorization: token,
+        },
+        data: {
+          Authorization: token,
+        },
+      };
+      const res = await axios(options);
+
+      if (res.data.code !== 200) {
+        toastController({
+          mes: "您还未登录，先登录吧!",
+          timeout: 1000,
+        });
+        setTimeout(() => {
+          navigate("/");
+        }, 1000);
+      }
+    };
+    isLogin();
 
     fetchData();
   }, []);
@@ -73,6 +99,10 @@ export default function MyItems() {
                     <div className="h-14 w-full text-gray-500 py-1 overflow-hidden ">
                       {item.reimbursementTemplateRemark}
                     </div>
+                    <p className="text-gray-700 truncate">
+                      <span className="font-bold ">申请时间：</span>
+                      {item.createTime}
+                    </p>
                   </div>
                   {/* line 分割线 */}
                   <div className="h-28 w-0 border-l-2 border-blue-300"></div>

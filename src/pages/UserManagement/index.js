@@ -1,17 +1,51 @@
-import React from "react";
-import { useContext, useState, useEffect } from "react";
-import { Link, useNavigate, Outlet, useLocation } from "react-router-dom";
+import React, { useEffect, useContext } from "react";
+import { useNavigate, Outlet, useLocation } from "react-router-dom";
 import BackgroundCard from "../../Component/BackgroundCard";
-import AddUser from "../AddUser";
+import { GET_INFO_BY_TOKEN } from "../../utils/mapPath";
+import axios from "axios";
+import { ToastContext } from "../../App";
 
 // 待审核页面
 export default function UserManagement() {
   const navigate = useNavigate();
+  const toastController = useContext(ToastContext);
+
   function isFocus(path, str) {
     if (path.search(str) !== -1) return true;
     return false;
   }
   let path = useLocation().pathname;
+
+  useEffect(() => {
+    //判断是否登录
+    const isLogin = async () => {
+      let token = localStorage.getItem("token");
+      const options = {
+        url: GET_INFO_BY_TOKEN,
+        method: "GET",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Authorization: token,
+        },
+        data: {
+          Authorization: token,
+        },
+      };
+      const res = await axios(options);
+
+      if (res.data.code !== 200) {
+        toastController({
+          mes: "您还未登录，先登录吧!",
+          timeout: 1000,
+        });
+        setTimeout(() => {
+          navigate("/");
+        }, 1000);
+      }
+    };
+    isLogin();
+  }, []);
+
   return (
     <>
       <BackgroundCard>

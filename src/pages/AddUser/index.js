@@ -5,10 +5,13 @@ import {
   GET_UNIT_TYPE,
   GET_ROLE_TYPE,
   POST_ADD_A_USER,
+  GET_INFO_BY_TOKEN,
 } from "../../utils/mapPath";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export default function AddUser() {
+  const navigate = useNavigate();
   const toastController = useContext(ToastContext);
   const [unitTypeList, setUnitTypeList] = useState([]);
   const [unitId, setUnitId] = useState(undefined);
@@ -68,6 +71,34 @@ export default function AddUser() {
         });
       }
     };
+    //判断是否登录
+    const isLogin = async () => {
+      let token = localStorage.getItem("token");
+
+      const options = {
+        url: GET_INFO_BY_TOKEN,
+        method: "GET",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Authorization: token,
+        },
+        data: {
+          Authorization: token,
+        },
+      };
+      const res = await axios(options);
+
+      if (res.data.code !== 200) {
+        toastController({
+          mes: "您还未登录，先登录吧!",
+          timeout: 1000,
+        });
+        setTimeout(() => {
+          navigate("/");
+        }, 1000);
+      }
+    };
+    isLogin();
 
     fetchData1();
     fetchData2();
@@ -115,32 +146,32 @@ export default function AddUser() {
     <div className="h-115 w-full p-5 bg-sky-50 relative">
       <p>
         用户账号：
-        <input ref={userNameInput} type="text" className="h-8 w-96 px-3" />
+        <input ref={userNameInput} type="text" className="h-8 w-5/12 px-3" />
       </p>
       <br />
       <p>
         用户昵称：
-        <input ref={nameInput} type="text" className="h-8 w-96 px-3" />
+        <input ref={nameInput} type="text" className="h-8 w-5/12 px-3" />
       </p>
       <br />
       <p>
         邮箱地址：
-        <input ref={emailInput} type="text" className="h-8 w-96 px-3" />
+        <input ref={emailInput} type="text" className="h-8 w-5/12 px-3" />
       </p>
       <br />
       <p>
         联系手机：
-        <input ref={phoneInput} type="text" className="h-8 w-96 px-3" />
+        <input ref={phoneInput} type="text" className="h-8 w-5/12 px-3" />
       </p>
       <br />
       <p>
         联系地址：
-        <input ref={addressInput} type="text" className="h-8 w-96 px-3" />
+        <input ref={addressInput} type="text" className="h-8 w-5/12 px-3" />
       </p>
       <br />
       <p>
         银行账号：
-        <input ref={accountInput} type="text" className="h-8 w-96 px-3" />
+        <input ref={accountInput} type="text" className="h-8 w-5/12 px-3" />
       </p>
       <br />
       <p>
@@ -181,7 +212,7 @@ export default function AddUser() {
       <br />
       <p>
         账号密码：
-        <input ref={passwordInput} type="text" className="h-8 w-96 px-3" />
+        <input ref={passwordInput} type="text" className="h-8 w-5/12 px-3" />
       </p>
 
       <div

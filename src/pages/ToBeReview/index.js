@@ -1,9 +1,9 @@
 import React, { useContext, useState, useEffect } from "react";
 import { ToastContext } from "../../App";
-import { GET_ALL_TO_BE_REVIEW } from "../../utils/mapPath";
+import { GET_ALL_TO_BE_REVIEW, GET_INFO_BY_TOKEN } from "../../utils/mapPath";
 import axios from "axios";
-import { usePersonalInformation } from "../PersonalPage";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+// import { usePersonalInformation } from "../PersonalPage";
+import { useNavigate } from "react-router-dom";
 import BackgroundCard from "../../Component/BackgroundCard";
 import { ReviewSvg } from "../../svg";
 
@@ -12,8 +12,6 @@ export default function ToBeReview() {
   const navigate = useNavigate();
   const toastController = useContext(ToastContext);
   const [list, setList] = useState([]);
-  usePersonalInformation();
-  // const [list, setList] = useState([
   //   {
   //     id: 1,
   //     project: "大创",
@@ -65,7 +63,34 @@ export default function ToBeReview() {
         });
       }
     };
+    //判断是否登录
+    const isLogin = async () => {
+      let token = localStorage.getItem("token");
 
+      const options = {
+        url: GET_INFO_BY_TOKEN,
+        method: "GET",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Authorization: token,
+        },
+        data: {
+          Authorization: token,
+        },
+      };
+      const res = await axios(options);
+
+      if (res.data.code !== 200) {
+        toastController({
+          mes: "您还未登录，先登录吧!",
+          timeout: 1000,
+        });
+        setTimeout(() => {
+          navigate("/");
+        }, 1000);
+      }
+    };
+    isLogin();
     fetchData();
   }, []);
 
@@ -87,16 +112,22 @@ export default function ToBeReview() {
                   {/* left */}
                   <div className="h-full w-10/12 bg-red-10 pr-3">
                     <p className="text-sky-700 text-xl font-bold truncate">
-                      {item.project}
+                      {item.reimbursementTemplateName}
                     </p>
-                    <p className="h-fit w-fit text-gray-500 pt-1 overflow-hidden">
+                    <p className="h-fit w-fit inline-block pr-14 text-gray-500 pt-1 overflow-hidden">
                       申请人：{item.applyUserName}
                     </p>
                     <p className="h-fit w-fit inline-block pr-14 text-gray-500 pt-1 overflow-hidden">
                       邮箱：{item.email}
                     </p>
-                    <p className="h-fit w-fit inline-block text-gray-500 pt-1 overflow-hidden">
+                    <p className="h-fit w-fit inline-block pr-14 text-gray-500 pt-1 overflow-hidden">
                       联系电话：{item.phone}
+                    </p>
+                    <p className="h-fit w-fit inline-block pr-14 text-gray-500 pt-1 overflow-hidden">
+                      所属单位：{item.unitName}
+                    </p>
+                    <p className="h-fit w-fit inline-block pr-14 text-gray-500 pt-1 overflow-hidden">
+                      申请时间：{item.updateTime}
                     </p>
                   </div>
                   {/* line 分割线 */}

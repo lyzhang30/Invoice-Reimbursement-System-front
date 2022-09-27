@@ -61,7 +61,6 @@ export default function Login(props) {
       // let token = localStorage.getItem("token");
       localStorage.setItem("token", ans.data.data.token);
 
-      console.log(ans.data.data.userDto.name);
       setUserInfo({
         id: ans.data.data.userDto.id,
         roleName: ans.data.data.userDto.roleName,

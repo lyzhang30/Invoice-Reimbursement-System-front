@@ -16,15 +16,11 @@ const ProjectManagement = lazy(() => import("./pages/ProjectManagement"));
 const UserManagement = lazy(() => import("./pages/UserManagement"));
 const ProjectModify = lazy(() => import("./pages/ProjectModify"));
 const AddUser = lazy(() => import("./pages/AddUser"));
-const SelectUser = lazy(() => import("./pages/SelectUser"));
+// const SelectUser = lazy(() => import("./pages/SelectUser"));
 const ModifyUser = lazy(() => import("./pages/ModifyUser"));
-const EmpowerUser = lazy(() => import("./pages/EmpowerUser"));
+const EmpowerUser = lazy(() => import("./pages/DeleteUser"));
 // const  = lazy(() => import(""));
 // const  = lazy(() => import(""));
-
-// 这个文件不要改动！！！
-// 这个文件不要改动！！！
-// 这个文件不要改动！！！
 
 function App() {
   const [toastConfig, setToastConfig] = useState({});

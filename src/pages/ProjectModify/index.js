@@ -4,12 +4,12 @@ import {
   POST_MODIFY_PROJECT,
   GET_PROJECT_BY_ID,
   POST_UPLOAD_FILE,
+  GET_INFO_BY_TOKEN,
 } from "../../utils/mapPath";
 import axios from "axios";
-import { usePersonalInformation } from "../PersonalPage";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import { BackSvg, AddSvg, CancelSvg, SubmitSvg, CloseSvg } from "../../svg";
-import BackgroundCard from "../../Component/BackgroundCard";
+// import { usePersonalInformation } from "../PersonalPage";
+import { useNavigate, useParams } from "react-router-dom";
+import { CloseSvg } from "../../svg";
 
 export default function ProjectModify() {
   const navigate = useNavigate();
@@ -57,7 +57,7 @@ export default function ProjectModify() {
       }
     };
     getProjectInfo();
-  }, [id]);
+  });
 
   function modifyProject() {
     const postModify = async () => {
@@ -102,7 +102,34 @@ export default function ProjectModify() {
         });
       }
     };
+    //判断是否登录
+    const isLogin = async () => {
+      let token = localStorage.getItem("token");
 
+      const options = {
+        url: GET_INFO_BY_TOKEN,
+        method: "GET",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Authorization: token,
+        },
+        data: {
+          Authorization: token,
+        },
+      };
+      const res = await axios(options);
+
+      if (res.data.code !== 200) {
+        toastController({
+          mes: "您还未登录，先登录吧!",
+          timeout: 1000,
+        });
+        setTimeout(() => {
+          navigate("/");
+        }, 1000);
+      }
+    };
+    isLogin();
     postModify();
   }
 
@@ -168,7 +195,7 @@ export default function ProjectModify() {
                     setCategoryName(e.target.value);
                   }}
                   type="text"
-                  className="h-9 w-130 bg-sky-50 px-3"
+                  className="h-9 w-7/12 bg-sky-50 px-3"
                 />
               </p>
               <br />
@@ -205,7 +232,7 @@ export default function ProjectModify() {
                     setStartTime(e.target.value);
                   }}
                   type="datetime-local"
-                  className="h-9 w-130 bg-sky-50 px-3"
+                  className="h-9 w-7/12 bg-sky-50 px-3"
                 />
               </p>
               <br />
@@ -217,7 +244,7 @@ export default function ProjectModify() {
                     setEndTime(e.target.value);
                   }}
                   type="datetime-local"
-                  className="h-9 w-130 bg-sky-50 px-3"
+                  className="h-9 w-7/12 bg-sky-50 px-3"
                 />
               </p>
               <br />
@@ -225,11 +252,11 @@ export default function ProjectModify() {
                 附加文件：
                 <input
                   type="file"
-                  className="h-8 w-96 bg-sky-50"
+                  className="h-8 w-7/12 bg-sky-50"
                   id="filePath"
                   onChange={uploadFile}
                 />
-                <span className="text-red-700"> （ 修改要重新上传文件 ） </span>
+                {/* <span className="text-red-700"> （ 修改要重新上传文件 ） </span> */}
               </p>
               <br />
               <p>申请详情：</p>

@@ -5,9 +5,10 @@ import {
   GET_ALL_PROJECT,
   POST_ADD_A_PROJECT,
   POST_UPLOAD_FILE,
+  GET_INFO_BY_TOKEN,
 } from "../../utils/mapPath";
 import axios from "axios";
-import { usePersonalInformation } from "../PersonalPage";
+// import { usePersonalInformation } from "../PersonalPage";
 import { useNavigate } from "react-router-dom";
 import { AddSvg, CloseSvg } from "../../svg";
 import BackgroundCard from "../../Component/BackgroundCard";
@@ -15,7 +16,6 @@ import BackgroundCard from "../../Component/BackgroundCard";
 // TODO:获取所有项目的列表
 export default function ProjectManagement() {
   const navigate = useNavigate();
-  usePersonalInformation();
   const toastController = useContext(ToastContext);
   const [list, setList] = useState([]);
   const [showAddWin, setShowAddWin] = useState(false);
@@ -25,7 +25,6 @@ export default function ProjectManagement() {
   const applyCategoryInput = useRef(null);
   const stInput = useRef(null);
   const etInput = useRef(null);
-  // const pathInput = useRef(null);
   const remarkInput = useRef(null);
 
   useEffect(() => {
@@ -46,7 +45,6 @@ export default function ProjectManagement() {
 
       if (res.data.code === 200) {
         setList(res.data.data);
-        console.log(res.data.data);
       } else {
         toastController({
           mes: res.data.message,
@@ -54,9 +52,36 @@ export default function ProjectManagement() {
         });
       }
     };
+    //判断是否登录
+    const isLogin = async () => {
+      let token = localStorage.getItem("token");
 
+      const options = {
+        url: GET_INFO_BY_TOKEN,
+        method: "GET",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Authorization: token,
+        },
+        data: {
+          Authorization: token,
+        },
+      };
+      const res = await axios(options);
+
+      if (res.data.code !== 200) {
+        toastController({
+          mes: "您还未登录，先登录吧!",
+          timeout: 1000,
+        });
+        setTimeout(() => {
+          navigate("/");
+        }, 1000);
+      }
+    };
+    isLogin();
     fetchData();
-  }, [toastController, showAddWin]);
+  }, [showAddWin]);
 
   function handleAdd() {
     setShowAddWin(true);
@@ -65,7 +90,7 @@ export default function ProjectManagement() {
   function handleDelete(id) {
     const fun = async () => {
       let token = localStorage.getItem("token");
-      console.log(id);
+
       const options = {
         url: POST_REMOVE_A_PROJECT,
         method: "POST",

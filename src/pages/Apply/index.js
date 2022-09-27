@@ -9,10 +9,11 @@ import {
   POST_ADD_INVOICE_DETAILS,
   POST_DELETE_INVOICE_DETAILS,
   BASE_PATH,
+  GET_INFO_BY_TOKEN,
 } from "../../utils/mapPath";
 import axios from "axios";
-import { usePersonalInformation } from "../PersonalPage";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+// import { usePersonalInformation } from "../PersonalPage";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import TopNav from "../../Component/TopNav";
 import { BackSvg, AddSvg, CancelSvg, SubmitSvg, CloseSvg } from "../../svg";
@@ -49,7 +50,7 @@ const Label = styled.span`
 // props : 模板 id
 export default function Apply() {
   const navigate = useNavigate();
-  usePersonalInformation();
+
   const { id } = useParams();
   const toastController = useContext(ToastContext);
   const [update, setUpdate] = useState(true);
@@ -88,6 +89,33 @@ export default function Apply() {
         });
       }
     };
+    const isLogin = async () => {
+      let token = localStorage.getItem("token");
+
+      const options = {
+        url: GET_INFO_BY_TOKEN,
+        method: "GET",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Authorization: token,
+        },
+        data: {
+          Authorization: token,
+        },
+      };
+      const res = await axios(options);
+
+      if (res.data.code !== 200) {
+        toastController({
+          mes: "您还未登录，先登录吧!",
+          timeout: 1000,
+        });
+        setTimeout(() => {
+          navigate("/");
+        }, 1000);
+      }
+    };
+    isLogin();
     getInvoiceType();
   }, []);
 
@@ -250,9 +278,6 @@ export default function Apply() {
 
     const postToAdd = async () => {
       let token = localStorage.getItem("token");
-      console.log("zlzl:");
-      console.log(invoiceimg);
-      console.log(voucherimg);
       const options = {
         url: POST_ADD_INVOICE_DETAILS,
         method: "POST",
@@ -288,6 +313,9 @@ export default function Apply() {
           mes: "添加成功!",
           timeout: 1000,
         });
+        setTimeout(() => {
+          setUpdate(!update);
+        }, 3000);
       } else {
         toastController({
           mes: res.data.message,

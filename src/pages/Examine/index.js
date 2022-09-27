@@ -1,15 +1,14 @@
-import React, { useContext, useState, useEffect, useRef } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
 import {
   GET_APPLY_BY_ID,
   POST_AGREE_AN_APPLY,
   POST_REJECT_AN_ALLPY,
+  GET_INFO_BY_TOKEN,
 } from "../../utils/mapPath";
 import { useNavigate, useParams } from "react-router-dom";
 import TopNav from "../../Component/TopNav";
 import { BackSvg } from "../../svg";
-import fapiao from "../../img/fapiao.jpg";
-import pingzheng from "../../img/pingzheng.jpg";
 import { usePersonalInformation } from "../PersonalPage";
 import { ToastContext } from "../../App";
 import axios from "axios";
@@ -47,7 +46,6 @@ const Label = styled.span`
 export default function Examine(props) {
   const navigate = useNavigate();
   const { roleName } = usePersonalInformation();
-
   const toastController = useContext(ToastContext);
   const { id } = useParams();
   const [info, setInfo] = useState(undefined);
@@ -79,9 +77,36 @@ export default function Examine(props) {
         });
       }
     };
+    //判断是否登录
+    const isLogin = async () => {
+      let token = localStorage.getItem("token");
 
+      const options = {
+        url: GET_INFO_BY_TOKEN,
+        method: "GET",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Authorization: token,
+        },
+        data: {
+          Authorization: token,
+        },
+      };
+      const res = await axios(options);
+
+      if (res.data.code !== 200) {
+        toastController({
+          mes: "您还未登录，先登录吧!",
+          timeout: 1000,
+        });
+        setTimeout(() => {
+          navigate("/");
+        }, 1000);
+      }
+    };
+    isLogin();
     getExamineInfo();
-  }, [id]);
+  }, []);
 
   function handleBack() {
     navigate(-1);

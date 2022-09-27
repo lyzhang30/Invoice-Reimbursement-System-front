@@ -51,7 +51,7 @@ export default function BackgroundCard(props) {
 }
 
 function LeftNav() {
-  usePersonalInformation();
+  const { roleName } = usePersonalInformation();
   function isFocus(path, str) {
     if (path.search(str) !== -1) return true;
     return false;
@@ -103,8 +103,8 @@ function LeftNav() {
           ></div>
         </div>
       }
-      {/* 待审核按钮 roleName !== "用户" && roleName !== "管理员" &&*/}
-      {
+      {/* 待审核按钮 */}
+      {roleName !== "用户" && (
         <div className="h-14 w-full flex justify-between items-center space-x-1 pl-1 select-none group">
           <div className={`h-8 w-8 flex justify-center items-center `}>
             <Svg3></Svg3>
@@ -121,9 +121,9 @@ function LeftNav() {
             ${isFocus(path, "ToBeReview") === true ? "h-full" : "h-0"}`}
           ></div>
         </div>
-      }
-      {/* 项目管理按钮 roleName === "管理员" &&*/}
-      {
+      )}
+      {/* 项目管理按钮 */}
+      {roleName === "管理员" && (
         <div className="h-14 w-full flex justify-between items-center space-x-1 pl-1 select-none group">
           <div className={`h-8 w-8 flex justify-center items-center `}>
             <Svg4></Svg4>
@@ -140,9 +140,9 @@ function LeftNav() {
             ${isFocus(path, "ProjectManagement") === true ? "h-full" : "h-0"}`}
           ></div>
         </div>
-      }
-      {/* 账号管理按钮 roleName === "管理员" && */}
-      {
+      )}
+      {/* 账号管理按钮  */}
+      {roleName === "管理员" && (
         <div className="h-14 w-full flex justify-between items-center space-x-1 pl-1 select-none group">
           <div className={`h-8 w-8 flex justify-center items-center `}>
             <Svg5></Svg5>
@@ -158,7 +158,7 @@ function LeftNav() {
             ${isFocus(path, "UserManagement") === true ? "h-full" : "h-0"}`}
           ></div>
         </div>
-      }
+      )}
     </div>
   );
 }

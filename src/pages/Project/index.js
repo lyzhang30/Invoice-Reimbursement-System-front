@@ -4,9 +4,10 @@ import {
   GET_PROJECT_BY_ID,
   POST_ADD_AN_APPLY,
   BASE_PATH,
+  GET_INFO_BY_TOKEN,
 } from "../../utils/mapPath";
 import axios from "axios";
-import { usePersonalInformation } from "../PersonalPage";
+// import { usePersonalInformation } from "../PersonalPage";
 import { useNavigate, useParams } from "react-router-dom";
 
 import styled from "styled-components";
@@ -30,15 +31,11 @@ const Label = styled.div`
   letter-spacing: 0.1em;
 `;
 
-// 待审核页面
-// collegeAgree: 0表示需要审核，1表示不需要
 export default function Project() {
   const navigate = useNavigate();
   const { id } = useParams();
   const toastController = useContext(ToastContext);
   const [info, setInfo] = useState({});
-
-  usePersonalInformation();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -63,7 +60,6 @@ export default function Project() {
 
       if (res.data.code === 200) {
         setInfo(res.data.data);
-        console.log(res.data.data);
       } else {
         toastController({
           mes: res.data.message,
@@ -71,7 +67,34 @@ export default function Project() {
         });
       }
     };
+    //判断是否登录
+    const isLogin = async () => {
+      let token = localStorage.getItem("token");
 
+      const options = {
+        url: GET_INFO_BY_TOKEN,
+        method: "GET",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Authorization: token,
+        },
+        data: {
+          Authorization: token,
+        },
+      };
+      const res = await axios(options);
+
+      if (res.data.code !== 200) {
+        toastController({
+          mes: "您还未登录，先登录吧!",
+          timeout: 1000,
+        });
+        setTimeout(() => {
+          navigate("/");
+        }, 1000);
+      }
+    };
+    isLogin();
     fetchData();
   }, []);
 

@@ -1,10 +1,10 @@
 import React from "react";
 import { useState, useEffect, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { usePersonalInformation } from "../PersonalPage";
 import { ToastContext } from "../../App";
-import { GET_ALL_PROJECT } from "../../utils/mapPath";
+import { GET_ALL_PROJECT, GET_INFO_BY_TOKEN } from "../../utils/mapPath";
 import BackgroundCard from "../../Component/BackgroundCard";
 
 // TODO:获取所有项目的列表
@@ -15,6 +15,33 @@ export default function Home() {
   usePersonalInformation();
 
   useEffect(() => {
+    const isLogin = async () => {
+      let token = localStorage.getItem("token");
+
+      const options = {
+        url: GET_INFO_BY_TOKEN,
+        method: "GET",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Authorization: token,
+        },
+        data: {
+          Authorization: token,
+        },
+      };
+      const res = await axios(options);
+
+      if (res.data.code !== 200) {
+        toastController({
+          mes: "您还未登录，先登录吧!",
+          timeout: 1000,
+        });
+        setTimeout(() => {
+          navigate("/");
+        }, 1000);
+      }
+    };
+
     const fetchData = async () => {
       let token = localStorage.getItem("token");
       const options = {
@@ -40,7 +67,7 @@ export default function Home() {
         });
       }
     };
-
+    isLogin();
     fetchData();
   }, []);
 

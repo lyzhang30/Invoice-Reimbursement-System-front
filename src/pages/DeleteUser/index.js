@@ -4,16 +4,14 @@ import {
   GET_BY_USERNAME,
   GET_UNIT_TYPE,
   GET_ROLE_TYPE,
-  POST_MODIFY_USER,
-  POST_DELETE_USER,
   POST_EMPOWER,
+  GET_INFO_BY_TOKEN,
 } from "../../utils/mapPath";
 import axios from "axios";
-import { usePersonalInformation } from "../PersonalPage";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function EmpowerUser() {
-  usePersonalInformation();
+  const navigate = useNavigate();
   const [unitTypeList, setUnitTypeList] = useState([]);
   const [unitId, setUnitId] = useState(0);
   const [roleIdList, setRoleIdList] = useState([]);
@@ -74,7 +72,34 @@ export default function EmpowerUser() {
         });
       }
     };
+    //判断是否登录
+    const isLogin = async () => {
+      let token = localStorage.getItem("token");
 
+      const options = {
+        url: GET_INFO_BY_TOKEN,
+        method: "GET",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Authorization: token,
+        },
+        data: {
+          Authorization: token,
+        },
+      };
+      const res = await axios(options);
+
+      if (res.data.code !== 200) {
+        toastController({
+          mes: "您还未登录，先登录吧!",
+          timeout: 1000,
+        });
+        setTimeout(() => {
+          navigate("/");
+        }, 1000);
+      }
+    };
+    isLogin();
     fetchData1();
     fetchData2();
   }, []);
@@ -172,7 +197,7 @@ export default function EmpowerUser() {
           ref={userNameInput}
           onKeyUp={enterQuery}
           type="text"
-          className="h-9 w-96 px-3"
+          className="h-9 w-5/12 px-3"
         />
       </p>
       <br />
@@ -185,7 +210,7 @@ export default function EmpowerUser() {
               disabled
               value={name !== undefined ? name : ""}
               type="text"
-              className="h-9 w-96 px-3"
+              className="h-9 w-5/12 px-3"
             />
           </p>
           <br />
@@ -195,7 +220,7 @@ export default function EmpowerUser() {
               disabled
               value={phone !== undefined ? phone : ""}
               type="text"
-              className="h-9 w-96 px-3"
+              className="h-9 w-5/12 px-3"
             />
           </p>
           <br />
@@ -205,7 +230,7 @@ export default function EmpowerUser() {
               disabled
               value={address !== undefined ? address : ""}
               type="text"
-              className="h-9 w-96 px-3"
+              className="h-9 w-5/12 px-3"
             />
           </p>
           <br />
@@ -215,7 +240,7 @@ export default function EmpowerUser() {
               disabled
               value={account !== undefined ? account : ""}
               type="text"
-              className="h-9 w-96 px-3"
+              className="h-9 w-5/12 px-3"
             />
           </p>
           <br />
@@ -225,7 +250,7 @@ export default function EmpowerUser() {
               disabled
               value={password !== undefined ? password : ""}
               type="text"
-              className="h-9 w-96 px-3"
+              className="h-9 w-5/12 px-3"
             />
           </p>
           <br />
