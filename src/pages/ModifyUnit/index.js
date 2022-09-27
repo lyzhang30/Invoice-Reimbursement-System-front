@@ -20,6 +20,7 @@ export default function ModifyUnit() {
   const [address, setAddress] = useState(undefined);
   const [phone, setPhone] = useState(undefined);
   const [account, setAccount] = useState(undefined);
+  const [email, setEmail] = useState(undefined);
 
   useEffect(() => {
     //判断是否登录
@@ -76,6 +77,7 @@ export default function ModifyUnit() {
         setAddress(res.data.data.address);
         setPhone(res.data.data.phone);
         setAccount(res.data.data.bankAmountId);
+        setEmail(res.data.data.email);
       } else {
         toastController({
           mes: res.data.message,
@@ -138,6 +140,7 @@ export default function ModifyUnit() {
           address: address,
           phone: phone,
           bankAmountId: account,
+          email: email,
         },
         params: {
           id: id,
@@ -145,6 +148,7 @@ export default function ModifyUnit() {
           address: address,
           phone: phone,
           bankAmountId: account,
+          email: email,
         },
       };
       const res = await axios(options);
@@ -206,6 +210,18 @@ export default function ModifyUnit() {
           </p>
           <br />
           <p>
+            邮箱地址：
+            <input
+              value={email !== undefined ? email : ""}
+              type="text"
+              className="h-9 w-5/12 px-3"
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+            />
+          </p>
+          <br />
+          <p>
             线下地址：
             <input
               value={address !== undefined ? address : ""}
@@ -229,7 +245,6 @@ export default function ModifyUnit() {
             />
           </p>
           <br />
-
           <div
             className="h-9 w-20 mr-48 rounded bg-red-200 transition-all duration-300 select-none
        hover:bg-red-300 text-gray-800 flex justify-center items-center float-right"
