@@ -154,7 +154,7 @@ export default function Project() {
               <Label>附件：</Label>
               <a
                 // href={`${BASE_PATH}${info.fileAddress}`}
-                href={`${BASE_PATH}c072a682-b370-4728-83a3-99531c063fa2.csv`}
+                href={`${BASE_PATH}${info.fileAddress}`}
                 download="test"
                 className="h-7 w-fit px-8 bg-sky-100 rounded-sm select-none"
               >

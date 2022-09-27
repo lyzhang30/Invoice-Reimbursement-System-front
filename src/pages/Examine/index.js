@@ -75,6 +75,9 @@ export default function Examine(props) {
           mes: res.data.message,
           timeout: 1000,
         });
+        setTimeout(() => {
+          navigate("/ToBeReview");
+        }, 1000);
       }
     };
     //判断是否登录

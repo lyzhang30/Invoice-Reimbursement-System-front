@@ -144,6 +144,9 @@ export default function Apply() {
           mes: res.data.message,
           timeout: 1000,
         });
+        setTimeout(() => {
+          navigate("/MyItems");
+        }, 1000);
       }
     };
 
@@ -576,14 +579,17 @@ export default function Apply() {
                   </div>
 
                   {/* 撤销按钮 */}
-                  <div
-                    className="w-20 h-full bg-red-100 flex justify-between items-center 
+                  {info.status === "未提交" && (
+                    <div
+                      className="w-20 h-full bg-red-100 flex justify-between items-center 
               px-2 mb-2 rounded select-none float-right mr-5 transition-all duration-300 hover:bg-red-200"
-                    onClick={handleCancel}
-                  >
-                    <CancelSvg size={24}></CancelSvg>
-                    <p className="text-gray-700 text-lg">撤销</p>
-                  </div>
+                      onClick={handleCancel}
+                    >
+                      <CancelSvg size={24}></CancelSvg>
+                      <p className="text-gray-700 text-lg">撤销</p>
+                    </div>
+                  )}
+
                   {/* 提交按钮 */}
                   {info.status === "未提交" && (
                     <div
@@ -596,7 +602,7 @@ export default function Apply() {
                     </div>
                   )}
 
-                  {/* zhuangtai */}
+                  {/* 状态 */}
                   <div
                     className="w-32 h-full flex justify-center items-center text-green-700 
               px-2 mb-2 rounded select-none float-right font-bold mr-20"
@@ -639,6 +645,13 @@ export default function Apply() {
                     <Label>到账银行账号：</Label>
                     <Content>{info.userDto.bankAmountId}</Content>
                   </p>
+                  {info.status === "已驳回" && (
+                    <p>
+                      <br />
+                      <Label>驳回信息：</Label>
+                      <Content>{info.rejectedRemark}</Content>
+                    </p>
+                  )}
                 </BasicInfo>
 
                 {/* 附件上传 */}
@@ -652,6 +665,22 @@ export default function Apply() {
                         type="file"
                         onChange={uploadFile}
                       ></input>
+                    </div>
+                  </div>
+                )}
+
+                {/* 附件上传 */}
+                {info.status !== "未提交" && (
+                  <div className="w-fit h-fit px-6 my-5">
+                    <Label>附件：</Label>
+                    <div className="h-8 w-96 mt-2 bg-gray-50">
+                      <a
+                        href={`${BASE_PATH}${info.fileAddress}`}
+                        download="test"
+                        className="h-7 w-fit px-8 bg-sky-100 rounded-sm select-none"
+                      >
+                        点击下载附件
+                      </a>
                     </div>
                   </div>
                 )}
