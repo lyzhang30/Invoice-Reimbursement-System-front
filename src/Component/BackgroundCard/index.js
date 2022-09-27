@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import StuLogo from "../../img/R-C.png";
-import Svg1, { Svg2, Svg3, Svg4, Svg5, Svg8 } from "../../svg";
+import Svg1, { Svg2, Svg3, Svg4, Svg5, Svg7 } from "../../svg";
 import TopNav from "../TopNav";
 import { usePersonalInformation } from "../../pages/PersonalPage";
 
@@ -163,7 +163,7 @@ function LeftNav() {
       {roleName === "管理员" && (
         <div className="h-14 w-full flex justify-between items-center space-x-1 pl-1 select-none group">
           <div className={`h-8 w-8 flex justify-center items-center `}>
-            <Svg8></Svg8>
+            <Svg7></Svg7>
           </div>
           <Link
             to={`/UnitManagement/Addunit`}

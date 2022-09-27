@@ -259,7 +259,9 @@ export default function Examine(props) {
                   </p>
                   <p>
                     <Label>是否需要所属单位审核：</Label>
-                    <Content>{info.applyCategory === 0 ? "是" : "否"}</Content>
+                    <Content>
+                      {info.applyCategory === "0" ? "是" : "否"}
+                    </Content>
                   </p>
                   <p>
                     <Label>到账银行账号：</Label>
@@ -348,7 +350,8 @@ export default function Examine(props) {
 
                 {/*确定通过按钮 */}
                 {(info.status === "已提交" ||
-                  (info.status === "单位已审核" && roleName === "管理员")) && (
+                  (info.status === "单位已审核" && roleName === "管理员") ||
+                  (info.status === "单位已审核" && roleName === "财务")) && (
                   <div
                     className="h-9 w-28 px-3 select-none flex items-center justify-around rounded-sm absolute bottom-3 right-3
                bg-blue-100 transition-all duration-500 hover:border-2 hover:border-blue-300 hover:bg-blue-200"
@@ -360,7 +363,8 @@ export default function Examine(props) {
 
                 {/* 驳回按钮 */}
                 {(info.status === "已提交" ||
-                  (info.status === "单位已审核" && roleName === "管理员")) && (
+                  (info.status === "单位已审核" && roleName === "管理员") ||
+                  (info.status === "单位已审核" && roleName === "财务")) && (
                   <div
                     className="h-9 w-28 px-3 select-none flex items-center justify-around rounded-sm absolute bottom-3 right-36
                bg-red-50 transition-all duration-500 hover:border-2 hover:border-red-300 hover:bg-red-100"

@@ -11,7 +11,8 @@ import {
   UPDATE_USER,
   GET_LOGIN_OUT,
 } from "../../utils/mapPath";
-import { Svg8 as Svg } from "../../svg";
+import { Svg8, ExitSvg } from "../../svg";
+import backgroundImg from "./../../img/十二铜人.png";
 
 const InputLabel = styled.div`
   display: block;
@@ -267,25 +268,36 @@ export default function PersonalPage() {
             <div
               className="h-10 w-32 float-right text-blue-600 bg-red-50 rounded mt-5 select-none
             transition-all duration-700 hover:bg-red-100"
+              onClick={handleLoginOut}
+            >
+              <div className="h-full flex justify-center items-center gap-1">
+                <ExitSvg></ExitSvg>
+                <p>退出登录</p>
+              </div>
+            </div>
+            {/* 上传按钮 */}
+            <div
+              className="h-10 w-32 mr-5 float-right text-blue-600 bg-red-50 rounded mt-5 select-none
+            transition-all duration-700 hover:bg-red-100"
               onClick={handleInformationUpload}
             >
               <div className="h-full flex justify-center items-center gap-1">
-                <Svg></Svg>
+                <Svg8></Svg8>
                 <p>上传信息</p>
               </div>
             </div>
           </div>
 
           {/* right */}
-          <div className="relative h-full w-4/12 flex-grow bg-gray-200">
-            <div
-              className="absolute h-9 w-28 rounded bg-red-50 transition-all duration-300 hover:bg-red-100
-            flex justify-center items-center bottom-2 right-2 text-blue-600 select-none"
-              onClick={handleLoginOut}
-            >
-              退出登录
-            </div>
-          </div>
+          <div
+            className="relative h-full w-4/12 flex-grow bg-gray-100"
+            style={{
+              backgroundImage: `url(${backgroundImg})`,
+              backgroundRepeat: "no-repeat",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
+          ></div>
         </div>
       </BackgroundCard>
     </>

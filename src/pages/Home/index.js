@@ -59,7 +59,6 @@ export default function Home() {
 
       if (res.data.code === 200) {
         setList(res.data.data);
-        console.log(res.data.data);
       } else {
         toastController({
           mes: res.data.message,
