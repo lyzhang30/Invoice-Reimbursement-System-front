@@ -134,14 +134,14 @@ export default function ModifyUnit() {
         },
         data: {
           id: id,
-          name: NameInput,
+          name: NameInput.current.value,
           address: address,
           phone: phone,
           bankAmountId: account,
         },
         params: {
           id: id,
-          name: NameInput,
+          name: NameInput.current.value,
           address: address,
           phone: phone,
           bankAmountId: account,
