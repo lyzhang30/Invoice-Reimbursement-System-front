@@ -1,16 +1,19 @@
 import React from "react";
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ToastContext } from "../../App";
-import { POST_ADD_A_UNIT } from "../../utils/mapPath";
-import { GET_INFO_BY_TOKEN } from "../../utils/mapPath";
-
+import {
+  POST_ADD_A_UNIT,
+  GET_ALL_UNIT_TYPE,
+  GET_INFO_BY_TOKEN,
+} from "../../utils/mapPath";
+import RandomColor from "../../utils/random";
 import axios from "axios";
 
 export default function Addunit() {
   const navigate = useNavigate();
   const toastController = useContext(ToastContext);
-
+  const [unitTypeList, setUnitTypeList] = useState(undefined);
   const nameInput = useRef(null);
   const phoneInput = useRef(null);
   const addressInput = useRef(null);
@@ -46,6 +49,31 @@ export default function Addunit() {
       }
     };
     isLogin();
+  }, []);
+
+  useEffect(() => {
+    const getUnitType = async () => {
+      let token = localStorage.getItem("token");
+      const options = {
+        url: GET_ALL_UNIT_TYPE,
+        method: "GET",
+        headers: {
+          "content-type": "application/json",
+          Authorization: token,
+        },
+      };
+      const res = await axios(options);
+      if (res.data.code === 200) {
+        setUnitTypeList(res.data.data);
+      } else {
+        toastController({
+          mes: res.data.message,
+          timeout: 1000,
+        });
+      }
+    };
+
+    getUnitType();
   }, []);
 
   function handleAddunit() {
@@ -91,8 +119,23 @@ export default function Addunit() {
 
   return (
     <div className="h-115 w-full p-5 bg-sky-50 relative">
+      {unitTypeList !== undefined && (
+        <div className="mb-10 ">
+          <p className="mb-2">已有单位：</p>
+          {unitTypeList.map((item) => {
+            // let color = `bg-${RandomColor()}-200`;
+            return (
+              <div
+                className={`h-fit w-fit px-2 py-1 inline-block rounded  mx-2 my-2 text-gray-600 bg-red-100`}
+              >
+                {item.name}
+              </div>
+            );
+          })}
+        </div>
+      )}
       <p>
-        单位名称：
+        新增单位：
         <input ref={nameInput} type="text" className="h-8 w-5/12 px-3" />
       </p>
       <br />
@@ -111,13 +154,13 @@ export default function Addunit() {
         <input ref={phoneInput} type="text" className="h-8 w-5/12 px-3" />
       </p>
       <br />
-      <p>
+      <p className="inline">
         银行账号：
         <input ref={accountInput} type="text" className="h-8 w-5/12 px-3" />
       </p>
       <div
-        className="h-9 w-20 rounded mr-60 bg-yellow-200 transition-all duration-300 select-none
-       hover:bg-yellow-300 text-gray-800 flex justify-center items-center float-right"
+        className="h-fit w-fit ml-24 rounded inline-block bg-amber-200 transition-all duration-300 select-none
+       hover:bg-yellow-300 text-gray-800 px-5 py-2 "
         onClick={handleAddunit}
       >
         添加

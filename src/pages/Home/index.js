@@ -15,33 +15,6 @@ export default function Home() {
   usePersonalInformation();
 
   useEffect(() => {
-    const isLogin = async () => {
-      let token = localStorage.getItem("token");
-
-      const options = {
-        url: GET_INFO_BY_TOKEN,
-        method: "GET",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          Authorization: token,
-        },
-        data: {
-          Authorization: token,
-        },
-      };
-      const res = await axios(options);
-
-      if (res.data.code !== 200) {
-        toastController({
-          mes: "您还未登录，先登录吧!",
-          timeout: 1000,
-        });
-        setTimeout(() => {
-          navigate("/");
-        }, 1000);
-      }
-    };
-
     const fetchData = async () => {
       let token = localStorage.getItem("token");
       const options = {
@@ -64,6 +37,49 @@ export default function Home() {
           mes: res.data.message,
           timeout: 1000,
         });
+      }
+    };
+
+    const isLogin = async () => {
+      let token = localStorage.getItem("token");
+
+      const options = {
+        url: GET_INFO_BY_TOKEN,
+        method: "GET",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Authorization: token,
+        },
+        data: {
+          Authorization: token,
+        },
+      };
+
+      // const res = await axios(options);
+
+      // if (res.data.code !== 200) {
+      //   toastController({
+      //     mes: "您还未登录，先登录吧!",
+      //     timeout: 2000,
+      //   });
+      //   setTimeout(() => {
+      //     navigate("/");
+      //   }, 1000);
+      // }
+
+      try {
+        const res = await axios(options);
+        if (res.data.code !== 200) {
+          toastController({
+            mes: "您还未登录，先登录吧!",
+            timeout: 2000,
+          });
+          setTimeout(() => {
+            navigate("/");
+          }, 1000);
+        }
+      } catch (error) {
+        console.log(error);
       }
     };
     isLogin();

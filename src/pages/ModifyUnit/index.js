@@ -5,6 +5,7 @@ import {
   POST_DELETE_UNIT,
   GET_BY_UNITNAME,
   GET_INFO_BY_TOKEN,
+  GET_ALL_UNIT_TYPE,
 } from "../../utils/mapPath";
 import axios from "axios";
 import { usePersonalInformation } from "../PersonalPage";
@@ -14,7 +15,7 @@ export default function ModifyUnit() {
   const navigate = useNavigate();
   const toastController = useContext(ToastContext);
   usePersonalInformation();
-
+  const [unitTypeList, setUnitTypeList] = useState(undefined);
   const NameInput = useRef(null);
   const [id, setID] = useState(undefined);
   const [address, setAddress] = useState(undefined);
@@ -51,6 +52,31 @@ export default function ModifyUnit() {
       }
     };
     isLogin();
+  }, []);
+
+  useEffect(() => {
+    const getUnitType = async () => {
+      let token = localStorage.getItem("token");
+      const options = {
+        url: GET_ALL_UNIT_TYPE,
+        method: "GET",
+        headers: {
+          "content-type": "application/json",
+          Authorization: token,
+        },
+      };
+      const res = await axios(options);
+      if (res.data.code === 200) {
+        setUnitTypeList(res.data.data);
+      } else {
+        toastController({
+          mes: res.data.message,
+          timeout: 1000,
+        });
+      }
+    };
+
+    getUnitType();
   }, []);
 
   function queryUnitInfo() {
@@ -177,14 +203,22 @@ export default function ModifyUnit() {
 
   return (
     <div className="h-115 w-full p-5 bg-sky-50 relative">
-      <div
-        className="h-9 w-20 mr-72 rounded bg-blue-200 transition-all duration-300 select-none
-       hover:bg-blue-300 text-gray-800 flex justify-center items-center float-right"
-        onClick={queryUnitInfo}
-      >
-        查询
-      </div>
-      <p>
+      {unitTypeList !== undefined && (
+        <div className="mb-10 ">
+          <p className="mb-2">已有单位：</p>
+          {unitTypeList.map((item) => {
+            // let color = `bg-${RandomColor()}-200`;
+            return (
+              <div
+                className={`h-fit w-fit px-2 py-1 inline-block rounded  mx-2 my-2 text-gray-600 bg-red-100`}
+              >
+                {item.name}
+              </div>
+            );
+          })}
+        </div>
+      )}
+      <p className="inline">
         单位名称：
         <input
           ref={NameInput}
@@ -193,11 +227,18 @@ export default function ModifyUnit() {
           className="h-9 w-5/12 px-3"
         />
       </p>
+      <div
+        className="h-fit w-fit py-2 px-5 rounded bg-blue-200 transition-all duration-300 select-none
+       hover:bg-blue-300 text-gray-800 inline-block ml-24"
+        onClick={queryUnitInfo}
+      >
+        查询
+      </div>
       <br />
       {/* 查询后显示 */}
       {id !== undefined && (
         <>
-          <p>
+          <p className="mt-6">
             联系电话：
             <input
               value={phone !== undefined ? phone : ""}
@@ -233,7 +274,7 @@ export default function ModifyUnit() {
             />
           </p>
           <br />
-          <p>
+          <p className="inline">
             银行账号：
             <input
               value={account !== undefined ? account : ""}
@@ -244,20 +285,22 @@ export default function ModifyUnit() {
               }}
             />
           </p>
-          <br />
+
+          {/* 修改按钮 */}
           <div
-            className="h-9 w-20 mr-48 rounded bg-red-200 transition-all duration-300 select-none
-       hover:bg-red-300 text-gray-800 flex justify-center items-center float-right"
-            onClick={handledelect}
-          >
-            删除
-          </div>
-          <div
-            className="h-9 w-20 mr-5 rounded bg-yellow-200 transition-all duration-300 select-none
-       hover:bg-yellow-300 text-gray-800 flex justify-center items-center float-right"
+            className="h-fit w-fit ml-24 rounded bg-amber-200 transition-all duration-300 select-none
+       hover:bg-amber-300 text-gray-800 px-5 py-2 inline-block"
             onClick={handleModify}
           >
             修改
+          </div>
+          {/* 删除按钮 */}
+          <div
+            className="h-fit w-fit ml-6 rounded bg-red-200 transition-all duration-300 select-none
+       hover:bg-red-300 text-gray-800 px-5 py-2 inline-block"
+            onClick={handledelect}
+          >
+            删除
           </div>
         </>
       )}

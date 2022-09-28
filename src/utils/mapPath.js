@@ -69,8 +69,10 @@ export const GET_ALL_UNIT = "/dd-unit/get-unit";
 export const POST_DELETE_UNIT = "/dd-unit/delete-unit";
 //根据单位名称查询单位信息
 export const GET_BY_UNITNAME = "/dd-unit/get-by-unitName";
-//
-// export const  = "";
+//获取所有单位
+export const GET_ALL_UNIT_TYPE = "/dd-unit/get-unit";
+//发票识别
+export const POST_INVOICE_DETAIL = "/common/identify-invoice";
 //
 // export const  = "";
 //

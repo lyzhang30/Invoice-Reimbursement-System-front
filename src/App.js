@@ -57,12 +57,9 @@ function App() {
               <Routes>
                 <Route path="/" element={<Login />}></Route>
                 <Route path="PersonalPage" element={<PersonalPage />}></Route>
-
-                {/* <Route path="Home" element={<Apply />}></Route> */}
                 <Route path="Home" element={<Home />}></Route>
                 <Route path="MyItems" element={<MyItems />}></Route>
                 <Route path="ToBeReview" element={<ToBeReview />}></Route>
-
                 <Route path="Project/:id" element={<Project />}></Route>
                 <Route path="Apply/:id" element={<Apply />}></Route>
                 <Route path="Examine/:id" element={<Examine />}></Route>
@@ -80,6 +77,7 @@ function App() {
                   <Route path="ModifyUser" element={<ModifyUser />} />
                   <Route path="EmpowerUser" element={<EmpowerUser />} />
                 </Route>
+                {/* 单位管理 */}
                 <Route path="UnitManagement" element={<UnitManagement />}>
                   <Route path="Addunit" element={<Addunit />} />
                   <Route path="ModifyUnit" element={<ModifyUnit />} />
